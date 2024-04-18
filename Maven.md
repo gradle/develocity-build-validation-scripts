@@ -140,6 +140,8 @@ the local builds to publish their build scans to a Develocity server reachable a
 ./01-validate-local-build-caching-same-location.sh -g compile -r https://github.com/gradle/maven-build-scan-quickstart -e -s https://develocity.example.io
 ```
 
+If this does not complete successfully and produce a proper experiment summary, consult the items listed further below.
+
 ## Authenticating with Develocity
 
 Some scripts fetch data from build scans that were published as part of running an experiment. The build scan data is fetched by leveraging the [Develocity API](https://docs.gradle.com/develocity/api-manual/). It is not strictly necessary that you have permission to call these APIs to execute a script successfully, but the summary provided once the script has finished running its experiment will be more comprehensive if the build scan data is accessible.
