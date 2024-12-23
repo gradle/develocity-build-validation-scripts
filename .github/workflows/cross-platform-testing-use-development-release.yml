@@ -90,4 +90,4 @@ jobs:
         run: ./03-validate-remote-build-caching-ci-ci.sh -1 https://ge.solutions-team.gradle.com/s/sysk4hrdbkja6 -2 https://ge.solutions-team.gradle.com/s/f7yfwfxqzg5us
       - name: Run Maven Experiment 04
         working-directory: develocity-maven-build-validation
-        run: ./04-validate-remote-build-caching-ci-local.sh -1 https://ge.solutions-team.gradle.com/s/pmyw25ry3h4ao -e -s https://ge.solutions-team.gradle.com
+        run: ./04-validate-remote-build-caching-ci-local.sh -1 https://ge.solutions-team.gradle.com/s/pmyw25ry3h4ao -s https://ge.solutions-team.gradle.com
