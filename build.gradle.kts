@@ -381,6 +381,7 @@ githubRelease {
     releaseName.set(gitHubReleaseName())
     tagName.set(gitReleaseTag())
     prerelease.set(isDevelopmentRelease)
+    draft.set(isDevelopmentRelease)
     overwrite.set(isDevelopmentRelease)
     generateReleaseNotes.set(false)
     body.set(releaseNotes)
