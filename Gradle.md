@@ -26,7 +26,7 @@ The build validation scripts are compatible with a large range of Gradle version
 Use the following command to download and unpack the build validation scripts for Gradle to the current directory:
 
 ```bash
-curl -s -L -O https://github.com/gradle/develocity-build-validation-scripts/releases/download/v2.7.2/develocity-gradle-build-validation-2.7.2.zip && unzip -q -o develocity-gradle-build-validation-2.7.2.zip
+curl -s -L -O https://github.com/gradle/develocity-build-validation-scripts/releases/download/v2.7.3/develocity-gradle-build-validation-2.7.3.zip && unzip -q -o develocity-gradle-build-validation-2.7.3.zip
 ```
 
 ## Structure
