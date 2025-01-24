@@ -1,13 +1,15 @@
 name: Create Development Release
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Enter the confirmation phrase 'DEVELOPMENT' (without quotes) if you are sure you want to trigger a development release.
+        required: true
 
 jobs:
   development_release:
+    if: github.event.inputs.confirmation == 'DEVELOPMENT'
     name: Release
     runs-on: ubuntu-latest
     steps:
