@@ -29,6 +29,12 @@ Use the following command to download and unpack the build validation scripts fo
 curl -s -L -O https://github.com/gradle/develocity-build-validation-scripts/releases/download/v2.7.3/develocity-gradle-build-validation-2.7.3.zip && unzip -q -o develocity-gradle-build-validation-2.7.3.zip
 ```
 
+Once downloaded, run the following command to verify that the scripts are set up correctly:
+
+```bash
+./01-validate-incremental-building.sh --version
+```
+
 ## Structure
 
 In the top-level folder, there are five different scripts that you can execute, each one representing
@@ -102,6 +108,8 @@ the local builds to publish their build scans to a Develocity server reachable a
 ```bash
 ./01-validate-incremental-building.sh -t assemble -r https://github.com/gradle/gradle-build-scan-quickstart -e -s https://develocity.example.io
 ```
+
+If this does not complete successfully and produce a proper experiment summary, consult the items listed further below. 
 
 ## Applying the Common Custom User Data Gradle plugin
 
