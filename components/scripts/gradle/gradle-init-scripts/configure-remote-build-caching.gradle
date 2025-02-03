@@ -11,11 +11,21 @@ settingsEvaluated { settings ->
         local {
             enabled = false
         }
-        remote(HttpBuildCache) {
+        (remote ?: remote(HttpBuildCache)).with {
             enabled = true
             push = false
-            if (remoteBuildCacheUrl) {
-                url = withPathTrailingSlash(new URI(remoteBuildCacheUrl))
+            def uri = remoteBuildCacheUrl
+                ? withPathTrailingSlash(new URI(remoteBuildCacheUrl))
+                : null
+            if (uri && delegate instanceof HttpBuildCache) {
+                url = uri
+            } else if (uri && delegate.class.name.startsWith('com.gradle.develocity')) {
+                path = uri.path
+            } else {
+                logger.warn("""
+                    Couldn't set build cache path automatically for remote of type '${delegate.class.name}'.
+                    Please ensure the path set on the 2nd build is the same as the 1st build.
+                """.stripIndent())
             }
         }
     }
