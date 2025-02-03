@@ -54,6 +54,8 @@ def registerBuildScanActions = { def buildScan, def rootProjectName ->
     buildScan.onError { error ->
         def errorFile = new File(expDir, 'errors.txt')
         errorFile.text = 'Build Scan publishing failed.'
+        def exceptionFile = new File(expDir, 'exceptions.txt')
+        exceptionFile.text = error
     }
 }
 
