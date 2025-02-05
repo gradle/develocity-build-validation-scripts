@@ -8,9 +8,47 @@ There are currently four experiments for Maven. You could also perform these exp
 
 ## Requirements
 
-You need to have [Bash](https://www.gnu.org/software/bash/) installed in order to run the build validation scripts.
+You must have the following tooling in order to use the Develocity Build Validation Scripts:
 
-If you plan to use the build validation scripts on Windows, then you will need to [install Windows Subsystem for Linux (WSL)](https://docs.microsoft.com/en-us/windows/wsl/install). The build validation scripts work well on the WSL default distribution (Ubuntu). Note how to deal with the eventuality of facing filename too long errors [here](#dealing-with-filename-too-long-errors-on-windows).
+- [Develocity](https://gradle.com/develocity/)
+- [Bash](https://www.gnu.org/software/bash/)
+
+For users running on Windows, you will need to [install Windows Subsystem for Linux (WSL)](https://docs.microsoft.com/en-us/windows/wsl/install).
+The scripts work well on the WSL default distribution (Ubuntu).
+Note how to deal with the eventuality of facing filename too long errors [here](#dealing-with-filename-too-long-errors-on-windows).
+
+### User permissions
+
+Experiment builds running locally require different permissions than those that run in CI.
+Note that while not all permissions are required, they're still strongly recommended for the best possible experience.
+
+Your Develocity user should be granted the following permissions:
+
+| User permission                 | Reason                                                                                                                                      | Required              |
+|---------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|
+| Publish build scans             | Analyzing the experiment results relies on build scans published to Develocity.                                                             | Yes                   |
+| Read build cache data           | Reading from the remote build cache.                                                                                                        | Only for experiment 4 |
+| View build scans and build data | Build scans can be used to perform a deeper analysis of the experiment results.                                                             | No                    |
+| Access build data via the API   | Used to retrieve the summarized experiment results. See [Authenticating with Develocity](#authenticating-with-develocity) for more details. | No                    |
+
+> [!IMPORTANT]
+> Your Develocity user must be granted one of `View build scans and build data` or `Access build data via the API`.
+> If you have neither, you will have no way to view the experiment results.
+
+The Develocity user used for CI builds should be granted the following permissions:
+
+| User permission                 | Reason                                                                                                                                      | Required                                        |
+|---------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
+| Publish build scans             | Analyzing the experiment results relies on build scans published to Develocity.                                                             | Yes                                             |
+| Read and write build cache data | Writing to the remote build cache.                                                                                                          | Yes                                             |
+| Access build data via the API   | Used to retrieve the summarized experiment results. See [Authenticating with Develocity](#authenticating-with-develocity) for more details. | Only when using `--fail-if-not-fully-cacheable` |
+
+### Common Custom User Data Gradle plugin
+
+To get the most out of the experiments and also when building with Develocity during daily development, it is highly recommended that you apply the [Common Custom User Data Maven extension](https://github.com/gradle/common-custom-user-data-maven-extension) to your build.
+This free, open-source plugin enhances build scans with additional tags, links, and custom values that are considered during the experiments.
+
+You can find a complete example of how to apply the Common Custom User Data Maven extension to your build [here](https://github.com/gradle/develocity-build-config-samples/blob/main/common-develocity-maven-configuration/.mvn/extensions.xml).
 
 ## Compatibility
 
@@ -101,12 +139,6 @@ the local builds to publish their build scans to a Develocity server reachable a
 ```bash
 ./01-validate-local-build-caching-same-location.sh -g compile -r https://github.com/gradle/maven-build-scan-quickstart -e -s https://develocity.example.io
 ```
-
-## Applying the Common Custom User Data Maven extension
-
-To get the most out of the experiments and also when building with Develocity during daily development, it is highly recommended that you apply the [Common Custom User Data Maven extension](https://github.com/gradle/common-custom-user-data-maven-extension) to your build. This free, open-source plugin enhances build scans with additional tags, links, and custom values that are considered during the experiments.
-
-You can find a complete example of how to apply the Common Custom User Data Maven extension to your build [here](https://github.com/gradle/develocity-build-config-samples/blob/main/common-develocity-maven-configuration/.mvn/extensions.xml).
 
 ## Authenticating with Develocity
 
