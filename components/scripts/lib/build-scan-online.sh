@@ -95,6 +95,10 @@ fetch_build_scan_data() {
     args+=("--brief-logging")
   fi
 
+  if [[ "${fail_if_not_fully_cacheable}" == "on" ]]; then
+    args+=("--build-scan-availability-wait-timeout" "60")
+  fi
+
   for run_num in "${!build_scan_urls[@]}"; do
     args+=( "${run_num},${build_scan_urls[run_num]}" )
   done
