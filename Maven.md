@@ -19,29 +19,29 @@ Note how to deal with the eventuality of facing filename too long errors [here](
 
 ### User permissions
 
-Experiment builds running locally require different permissions than those that run in CI.
-Note that while not all permissions are required, they're still strongly recommended for the best possible experience.
+The Develocity Build Validation Scripts involve running builds on your local machine and CI environment.
+The builds run on your local machine require a different set of Develocity user permissions than those run in your CI environment.
 
-Your Develocity user should be granted the following permissions:
+#### Permissions required for your Develocity user
 
-| User permission                 | Reason                                                                                                                                      | Required              |
-|---------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|
-| Publish build scans             | Analyzing the experiment results relies on build scans published to Develocity.                                                             | Yes                   |
-| Read build cache data           | Reading from the remote build cache.                                                                                                        | Only for experiment 4 |
-| View build scans and build data | Build scans can be used to perform a deeper analysis of the experiment results.                                                             | No                    |
-| Access build data via the API   | Used to retrieve the summarized experiment results. See [Authenticating with Develocity](#authenticating-with-develocity) for more details. | No                    |
+| User permission                 | Reason                                                                                                                                      |
+|---------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| Publish build scans             | Analyzing the experiment results relies on build scans published to Develocity.                                                             |
+| Read build cache data           | Reading from the remote build cache.                                                                                                        |
+| View build scans and build data | Build scans can be used to perform a deeper analysis of the experiment results.                                                             |
+| Access build data via the API   | Used to retrieve the summarized experiment results. See [Authenticating with Develocity](#authenticating-with-develocity) for more details. |
 
 > [!IMPORTANT]
 > Your Develocity user must be granted one of `View build scans and build data` or `Access build data via the API`.
 > If you have neither, you will have no way to view the experiment results.
 
-The Develocity user used for CI builds should be granted the following permissions:
+#### Permissions required for the CI user
 
-| User permission                 | Reason                                                                                                                                      | Required                                        |
-|---------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------|
-| Publish build scans             | Analyzing the experiment results relies on build scans published to Develocity.                                                             | Yes                                             |
-| Read and write build cache data | Writing to the remote build cache.                                                                                                          | Yes                                             |
-| Access build data via the API   | Used to retrieve the summarized experiment results. See [Authenticating with Develocity](#authenticating-with-develocity) for more details. | Only when using `--fail-if-not-fully-cacheable` |
+| User permission                 | Reason                                                                                                                                      |
+|---------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| Publish build scans             | Analyzing the experiment results relies on build scans published to Develocity.                                                             |
+| Read and write build cache data | Writing to the remote build cache.                                                                                                          |
+| Access build data via the API   | Used to retrieve the summarized experiment results. See [Authenticating with Develocity](#authenticating-with-develocity) for more details. |
 
 ### Common Custom User Data Gradle plugin
 
