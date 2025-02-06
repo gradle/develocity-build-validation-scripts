@@ -41,6 +41,7 @@ invoke_gradle() {
     -Ddevelocity.build-validation.runId="${RUN_ID}"
     -Ddevelocity.build-validation.runNum="${run_num}"
     -Ddevelocity.build-validation.scriptsVersion="${SCRIPT_VERSION}"
+    -Ddevelocity.build-scan.upload-in-background=false
     -Ddevelocity.capture-file-fingerprints=true
     -Dpts.enabled=false
   )
