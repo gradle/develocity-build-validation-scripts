@@ -27,7 +27,7 @@ The builds run on your local machine require a different set of Develocity user 
 | User permission                 | Reason                                                                                                                                                                           |
 |---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Publish build scans             | Analyzing the experiment results relies on build scans published to Develocity.                                                                                                  |
-| Read build cache data           | Reading from the Remote Build Cache during the experiments that depend on the Remote Build Cache.                                                                                |
+| Read build cache data           | Reading from the remote build cache during the experiments that depend on the remote build cache.                                                                                |
 | View build scans and build data | Performing a deeper analysis of the experiment results in Develocity.                                                                                                            |
 | Access build data via the API   | Retrieving the published build data from Develocity to summarize the experiment results. See [Authenticating with Develocity](#authenticating-with-develocity) for more details. |
 
@@ -40,7 +40,7 @@ The builds run on your local machine require a different set of Develocity user 
 | User permission                 | Reason                                                                                                                                                                           |
 |---------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Publish build scans             | Analyzing the experiment results relies on build scans published to Develocity.                                                                                                  |
-| Read and write build cache data | Reading from and writing to the Remote Build Cache.                                                                                                                              |
+| Read and write build cache data | Reading from and writing to the remote build cache.                                                                                                                              |
 | Access build data via the API   | Retrieving the published build data from Develocity to summarize the experiment results. See [Authenticating with Develocity](#authenticating-with-develocity) for more details. |
 
 ### Common Custom User Data Gradle plugin
