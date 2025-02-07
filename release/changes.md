@@ -3,3 +3,4 @@
 
 - [FIX] Successful exit code returned when performance characteristics are unknown and `--fail-if-not-fully-cacheable` is used
 - [FIX] Gradle experiments do not disable background Build Scan publication
+- [FIX] Common Custom User Data Gradle plugin not injected for Gradle builds
