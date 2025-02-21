@@ -128,6 +128,7 @@ if (GradleVersion.current() < GradleVersion.version('6.0')) {
                     failMissingDevelocityServerURL('https://docs.gradle.com/develocity/gradle-plugin/current/#connecting_to_develocity')
                 }
 
+                develocity.buildScan.publishing.onlyIf { true }
                 registerBuildScanActions(develocity.buildScan, rootProject.name)
                 addBuildScanCustomData(develocity.buildScan, develocity.server.get())
             }
@@ -161,6 +162,7 @@ if (GradleVersion.current() < GradleVersion.version('6.0')) {
                 failMissingDevelocityServerURL('https://docs.gradle.com/develocity/gradle-plugin/current/#connecting_to_develocity')
             }
 
+            settings.develocity.buildScan.publishing.onlyIf { true }
             registerBuildScanActions(settings.develocity.buildScan, settings.rootProject.name)
             addBuildScanCustomData(settings.develocity.buildScan, settings.develocity.server.get())
         }
