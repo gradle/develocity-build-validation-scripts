@@ -66,7 +66,7 @@ jobs:
     steps:
       - name: Set up WSL
         if: ${{ runner.os == 'Windows' }}
-        uses: Vampire/setup-wsl@v4
+        uses: Vampire/setup-wsl@v5
         with:
           distribution: Ubuntu-24.04
           additional-packages: curl unzip wget apt-transport-https gnupg
