@@ -4,23 +4,109 @@ static getInputParam(Gradle gradle, String name) {
     return gradle.startParameter.systemPropertiesArgs[name] ?: System.getProperty(name) ?: System.getenv(envVarName)
 }
 
+def isTopLevelBuild = !gradle.parent
+
+def expDir = getInputParam(gradle, 'develocity.build-validation.expDir')
+def remoteBuildCacheType = getInputParam(gradle, 'develocity.build-validation.remoteBuildCacheType')
 def remoteBuildCacheUrl = getInputParam(gradle, 'develocity.build-validation.remoteBuildCacheUrl')
 
-settingsEvaluated { settings ->
+def docsRoot = 'https://docs.gradle.com/develocity/gradle-plugin'
+
+settingsEvaluated { Settings settings ->
     settings.buildCache {
         local {
             enabled = false
         }
-        remote(HttpBuildCache) {
-            enabled = true
-            push = false
-            if (remoteBuildCacheUrl) {
-                url = withPathTrailingSlash(new URI(remoteBuildCacheUrl))
+
+        if (remoteBuildCacheType) {
+            if (!['develocity', 'gradle-enterprise', 'http'].contains(remoteBuildCacheType)) {
+                // The scripts already fail if the value of --remote-build-cache-type isn't valid.
+                // This is for the sake of completeness since this init script assumes it's valid.
+                def errorFile = new File(expDir, 'errors.txt')
+                errorFile.text = "Unknown remote build cache type: ${remoteBuildCacheType}"
+                throw new IllegalStateException("Unknown remote build cache type: ${remoteBuildCacheType}")
             }
+
+            if (isTopLevelBuild && missingRequiredPlugin(settings, remoteBuildCacheType)) {
+                // Included builds may not have the necessary plugin applied.
+                // Only fail if the top-level build is missing the required extension.
+                def errorFile = new File(expDir, 'errors.txt')
+                errorFile.text = "Remote build cache type '${remoteBuildCacheType}' requested, but the required plugin is not applied."
+                if (remoteBuildCacheType == 'develocity') {
+                    throw new IllegalStateException("Remote build cache type 'develocity' requested,\n" +
+                        "but the Develocity Gradle plugin is not applied.\n" +
+                        "Either apply it directly (see $docsRoot/current/#applying_the_plugin),\n" +
+                        "use --enable-develocity to enable the plugin,\n" +
+                        "or use --remote-build-cache-type to choose a different remote build cache type\n" +
+                        "when running the build validation script.")
+                } else {
+                    throw new IllegalStateException("Remote build cache type 'gradle-enterprise' requested,\n" +
+                        "but the Gradle Enterprise Gradle plugin is not applied (see $docsRoot/legacy/#applying_the_plugin).")
+                }
+            }
+
+            def remoteBuildCacheImplementation = getRemoteBuildCacheImplementation(settings, remoteBuildCacheType)
+            if (remoteBuildCacheImplementation) {
+                logger.debug("Configuring remote build cache type for '${settings.rootProject.name}' as: ${remoteBuildCacheImplementation}")
+                remote(remoteBuildCacheImplementation)
+            }
+        }
+
+        logger.debug("Remote build cache type for '${settings.rootProject.name}' is: ${remote?.class?.name}")
+        if (remote) {
+            remote {
+                enabled = true
+            }
+
+            def remoteBuildCacheUri = remoteBuildCacheUrl ? withPathTrailingSlash(new URI(remoteBuildCacheUrl)) : null
+            if (remote instanceof HttpBuildCache) {
+                if (remoteBuildCacheUrl) {
+                    remote.url = remoteBuildCacheUri
+                } else if (!remote.url) {
+                    // Gradle already fails in this case, but handling it here means we can fail the experiment more
+                    // gracefully and provide guidance the user.
+                    def errorFile = new File(expDir, 'errors.txt')
+                    errorFile.text = 'A remote build cache URL has not been configured in the project or on the command line.'
+                    throw new IllegalStateException("A remote build cache URL is not configured.\n"
+                        + "Either configure it directly (see $docsRoot/current/#using_gradles_built_in_http_connector) in the project,\n"
+                        + "or use --remote-build-cache-url when running the build validation script.")
+                }
+            } else if (remote.class.name.startsWith('com.gradle.develocity') || remote.class.name.startsWith('com.gradle.enterprise')) {
+                if (remoteBuildCacheUri) {
+                    remote.server = toServerPart(remoteBuildCacheUri)
+                    remote.path = remoteBuildCacheUri.path
+                }
+            }
+        } else if (isTopLevelBuild) {
+            def errorFile = new File(expDir, 'errors.txt')
+            errorFile.text = "Remote build cache is not configured for the project."
+            throw new IllegalStateException("Remote build cache is not configured for the project.\n" +
+                "Either configure it directly (see $docsRoot/current/#using_the_develocity_connector),\n" +
+                "or use --remote-build-cache-type when running the build validation script.")
         }
     }
 }
 
+static boolean missingRequiredPlugin(Settings settings, String type) {
+    return type == "develocity" && !settings.pluginManager.hasPlugin('com.gradle.develocity')
+        || type == "gradle-enterprise" && !settings.pluginManager.hasPlugin('com.gradle.enterprise')
+}
+
+static Class<? extends BuildCache> getRemoteBuildCacheImplementation(Settings settings, String type) {
+    if (type == "develocity") {
+        return settings.develocity.buildCache
+    } else if (type == "gradle-enterprise") {
+        return settings.gradleEnterprise.buildCache
+    } else if (type == "http") {
+        return HttpBuildCache
+    }
+    return null
+}
+
 static URI withPathTrailingSlash(URI uri) {
-    uri.path.endsWith("/") ? uri : new URI(uri.scheme, uri.userInfo, uri.host, uri.port, uri.path + "/", uri.query, uri.fragment)
+    return uri.path.endsWith("/") ? uri : new URI(uri.scheme, uri.userInfo, uri.host, uri.port, uri.path + "/", uri.query, uri.fragment)
+}
+
+static String toServerPart(URI uri) {
+    return new URI(uri.scheme, uri.userInfo, uri.host, uri.port, null, uri.query, uri.fragment)
 }

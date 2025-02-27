@@ -10,6 +10,8 @@ git_branches=()
 git_commit_ids=()
 requested_tasks=()
 build_outcomes=()
+remote_build_cache_types=()
+remote_build_cache_class_names=()
 remote_build_cache_urls=()
 remote_build_cache_shards=()
 
@@ -77,7 +79,7 @@ parse_build_scan_row() {
 
   local run_num
 
-  while IFS=, read -r run_num field_1 field_2 field_3 field_4 field_5 field_6 field_7 field_8 field_9 field_10 field_11 field_12 field_13 field_14 field_15 field_16 field_17 field_18 field_19 field_20; do
+  while IFS=, read -r run_num field_1 field_2 field_3 field_4 field_5 field_6 field_7 field_8 field_9 field_10 field_11 field_12 field_13 field_14 field_15 field_16 field_17 field_18 field_19 field_20 field_21 field_22; do
     debug "Build Scan $field_4 is for build $run_num"
 
     # The project_name should be overridden by Build Scan data if it is
@@ -127,21 +129,23 @@ parse_build_scan_row() {
     # The below fields are always set by Build Scan data regardless of their
     # previous value and are always safe to override.
 
-    remote_build_cache_urls[run_num]="${field_10}"
-    remote_build_cache_shards[run_num]="${field_11}"
+    remote_build_cache_types[run_num]="${field_10}"
+    remote_build_cache_class_names[run_num]="${field_11}"
+    remote_build_cache_urls[run_num]="${field_12}"
+    remote_build_cache_shards[run_num]="${field_13}"
 
     # Build caching performance metrics
-    avoided_up_to_date_num_tasks[run_num]="${field_12}"
-    avoided_up_to_date_avoidance_savings[run_num]="${field_13}"
-    avoided_from_cache_num_tasks[run_num]="${field_14}"
-    avoided_from_cache_avoidance_savings[run_num]="${field_15}"
-    executed_cacheable_num_tasks[run_num]="${field_16}"
-    executed_cacheable_duration[run_num]="${field_17}"
-    executed_not_cacheable_num_tasks[run_num]="${field_18}"
-    executed_not_cacheable_duration[run_num]="${field_19}"
+    avoided_up_to_date_num_tasks[run_num]="${field_14}"
+    avoided_up_to_date_avoidance_savings[run_num]="${field_15}"
+    avoided_from_cache_num_tasks[run_num]="${field_16}"
+    avoided_from_cache_avoidance_savings[run_num]="${field_17}"
+    executed_cacheable_num_tasks[run_num]="${field_18}"
+    executed_cacheable_duration[run_num]="${field_19}"
+    executed_not_cacheable_num_tasks[run_num]="${field_20}"
+    executed_not_cacheable_duration[run_num]="${field_21}"
 
     # Other build metrics
-    serialization_factors[run_num]="${field_20}"
+    serialization_factors[run_num]="${field_22}"
   done <<< "${build_scan_row}"
 }
 

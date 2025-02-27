@@ -158,6 +158,9 @@ fetch_build_params_from_build_scan() {
 }
 
 read_build_params_from_build_scan_data() {
+  if [[ "${remote_build_cache_types[0]}" == "disabled" ]]; then
+    die "ERROR: Remote build cache was disabled for the first build. Enable the remote build cache in the build and restart the experiment."
+  fi
   if [ -z "${git_repo}" ]; then
     git_repo="${git_repos[0]}"
     project_name="$(basename -s .git "${git_repo}")"
