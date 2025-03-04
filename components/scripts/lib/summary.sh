@@ -123,7 +123,7 @@ detect_warnings_from_build_scans() {
       # "Develocity Build Validation Scripts" is specifically mentioned as to
       # not imply Develocity itself does not work with other remote build cache
       # implementations.
-      warnings+=("The ${ORDINALS[i]} build ran using a remote build cache implementation not officially supported by the Develocity Build Validation Scripts.")
+      warnings+=("The ${ORDINALS[i]} build ran using a remote build cache implementation not officially supported by the experiment.")
     fi
   done
 

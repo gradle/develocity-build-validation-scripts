@@ -23,8 +23,9 @@ settingsEvaluated { Settings settings ->
                 // The scripts already fail if the value of --remote-build-cache-type isn't valid.
                 // This is for the sake of completeness since this init script assumes it's valid.
                 def errorFile = new File(expDir, 'errors.txt')
-                errorFile.text = "Unknown remote build cache type: ${remoteBuildCacheType}"
-                throw new IllegalStateException("Unknown remote build cache type: ${remoteBuildCacheType}")
+                def message = "Invalid value '${remoteBuildCacheType}' for remote build cache type. Values are 'develocity', 'gradle-enterprise', or 'http'."
+                errorFile.text = message
+                throw new IllegalStateException(message)
             }
 
             if (isTopLevelBuild && missingRequiredPlugin(settings, remoteBuildCacheType)) {
@@ -47,12 +48,12 @@ settingsEvaluated { Settings settings ->
 
             def remoteBuildCacheImplementation = getRemoteBuildCacheImplementation(settings, remoteBuildCacheType)
             if (remoteBuildCacheImplementation) {
-                logger.debug("Configuring remote build cache type for '${settings.rootProject.name}' as: ${remoteBuildCacheImplementation}")
+                logger.debug("Configuring remote build cache implementation for '${settings.rootProject.name}' as: ${remoteBuildCacheImplementation}")
                 remote(remoteBuildCacheImplementation)
             }
         }
 
-        logger.debug("Remote build cache type for '${settings.rootProject.name}' is: ${remote?.class?.name}")
+        logger.debug("Remote build cache implementation for '${settings.rootProject.name}' is: ${remote?.class?.name}")
         if (remote) {
             remote {
                 enabled = true

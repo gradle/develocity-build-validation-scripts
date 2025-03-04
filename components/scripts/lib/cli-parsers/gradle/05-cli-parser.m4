@@ -31,7 +31,7 @@ function print_help() {
   print_option_usage -p
   print_option_usage -t
   print_option_usage -a
-  print_option_usage "-y, --remote-build-cache-type" "Specifies the type of remote build cache to use in the second build run locally. Must be one of: 'http', 'gradle-enterprise', or 'develocity'"
+  print_option_usage "-y, --remote-build-cache-type" "Specifies the type of remote build cache to use in the second build run locally. Values are 'develocity', 'gradle-enterprise', or 'http'."
   print_option_usage "-u, --remote-build-cache-url" "Specifies the URL for the remote build cache to access in the second build run locally."
   print_option_usage -s
   print_option_usage -e
