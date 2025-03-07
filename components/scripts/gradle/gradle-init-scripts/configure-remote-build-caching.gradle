@@ -95,7 +95,7 @@ static String toServerPart(URI uri) {
 // This is for the sake of completeness since this init script assumes it's valid.
 static void failInvalidRemoteBuildCacheType(String remoteBuildCacheType, String expDir) {
     def errorFile = new File(expDir, 'errors.txt')
-    def message = "Invalid value '${remoteBuildCacheType}' for remote build cache type. Values are 'develocity', 'gradle-enterprise', or 'http'."
+    def message = "Invalid value '${remoteBuildCacheType}' for remote build cache connector type. Values are 'develocity', 'gradle-enterprise', or 'http'."
     errorFile.text = message
     throw new IllegalStateException(message)
 }
@@ -104,16 +104,16 @@ static void failInvalidRemoteBuildCacheType(String remoteBuildCacheType, String 
 // Only fail if the top-level build is missing the required extension.
 static void failMissingRequiredPlugin(String remoteBuildCacheType, String expDir, String docsRoot) {
     def errorFile = new File(expDir, 'errors.txt')
-    errorFile.text = "Remote build cache type '${remoteBuildCacheType}' requested, but the required plugin is not applied."
+    errorFile.text = "Remote build cache connector type '${remoteBuildCacheType}' requested, but the required plugin is not applied."
     if (remoteBuildCacheType == 'develocity') {
-        throw new IllegalStateException("Remote build cache type 'develocity' requested,\n" +
+        throw new IllegalStateException("Remote build cache connector type 'develocity' requested,\n" +
             "but the Develocity Gradle plugin is not applied.\n" +
             "Either apply it directly (see $docsRoot/current/#applying_the_plugin),\n" +
             "use --enable-develocity to enable the plugin,\n" +
-            "or use --remote-build-cache-type to choose a different remote build cache type\n" +
+            "or use --remote-build-cache-type to choose a different remote build cache connector type\n" +
             "when running the build validation script.")
     } else {
-        throw new IllegalStateException("Remote build cache type 'gradle-enterprise' requested,\n" +
+        throw new IllegalStateException("Remote build cache connector type 'gradle-enterprise' requested,\n" +
             "but the Gradle Enterprise Gradle plugin is not applied (see $docsRoot/legacy/#applying_the_plugin).")
     }
 }

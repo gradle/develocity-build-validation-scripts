@@ -391,11 +391,11 @@ collect_remote_build_cache() {
 
 collect_remote_build_cache_type() {
   local default_remote_cache_type="<project default>"
-  prompt_for_setting "What is the remote build cache type to use? [develocity, gradle-enterprise, http, or <BLANK>]" "${remote_build_cache_type}" "${default_remote_cache_type}" remote_build_cache_type
+  prompt_for_setting "What is the remote build cache connector type to use? [develocity, gradle-enterprise, http, or <BLANK>]" "${remote_build_cache_type}" "${default_remote_cache_type}" remote_build_cache_type
 
   if [[ -n "${remote_build_cache_type}" && "${remote_build_cache_type}" != 'http' && "${remote_build_cache_type}" != 'gradle-enterprise' && "${remote_build_cache_type}" != 'develocity' ]]; then
     print_bl
-    die "ERROR: Invalid value for remote build cache type. Values are 'develocity', 'gradle-enterprise', 'http', or <BLANK> for project default." "${INVALID_INPUT}"
+    die "ERROR: Invalid value for remote build cache connector type. Values are 'develocity', 'gradle-enterprise', 'http', or <BLANK> for project default." "${INVALID_INPUT}"
   fi
 
   if [[ "${remote_build_cache_type}" == "${default_remote_cache_type}" ]]; then
