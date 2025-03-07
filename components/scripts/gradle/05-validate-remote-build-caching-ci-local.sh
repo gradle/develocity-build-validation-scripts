@@ -40,6 +40,7 @@ develocity_server=''
 interactive_mode=''
 
 ci_build_scan_url=''
+remote_build_cache_type=''
 remote_build_cache_url=''
 mapping_file=''
 
@@ -110,9 +111,9 @@ wizard_execute() {
   collect_gradle_details
 
   print_bl
-  explain_remote_build_cache_url
+  explain_collect_remote_build_cache
   print_bl
-  collect_remote_build_cache_url
+  collect_remote_build_cache
   explain_command_to_repeat_experiment_after_collecting_parameters
 
   print_bl
@@ -136,6 +137,7 @@ wizard_execute() {
 
 map_additional_script_args() {
   ci_build_scan_url="${_arg_first_build_ci}"
+  remote_build_cache_type="${_arg_remote_build_cache_type}"
   remote_build_cache_url="${_arg_remote_build_cache_url}"
   mapping_file="${_arg_mapping_file}"
 }
@@ -151,6 +153,10 @@ validate_required_args() {
   if [[ "${enable_develocity}" == "on" && -z "${develocity_server}" ]]; then
     _PRINT_HELP=yes die "ERROR: Missing required argument when enabling Develocity on a project not already connected: --develocity-server" "${INVALID_INPUT}"
   fi
+
+  if [[ -n "${remote_build_cache_type}" && "${remote_build_cache_type}" != 'http' && "${remote_build_cache_type}" != 'gradle-enterprise' && "${remote_build_cache_type}" != 'develocity' ]]; then
+    _PRINT_HELP=yes die "ERROR: Invalid value for argument --remote-build-cache-type. Values are 'develocity', 'gradle-enterprise', or 'http'." "${INVALID_INPUT}"
+  fi
 }
 
 fetch_build_params_from_build_scan() {
@@ -160,6 +166,9 @@ fetch_build_params_from_build_scan() {
 }
 
 read_build_params_from_build_scan_data() {
+  if [[ "${remote_build_cache_types[0]}" == "disabled" ]]; then
+    die "ERROR: Remote build cache was disabled for the first build. Enable the remote build cache in the build and restart the experiment."
+  fi
   if [ -z "${git_repo}" ]; then
     git_repo="${git_repos[0]}"
     project_name="$(basename -s .git "${git_repo}")"
@@ -169,6 +178,9 @@ read_build_params_from_build_scan_data() {
   fi
   if [ -z "${git_commit_id}" ]; then
     git_commit_id="${git_commit_ids[0]}"
+  fi
+  if [[ -z "${remote_build_cache_type}" && "${remote_build_cache_types[0]}" != "unknown" ]]; then
+    remote_build_cache_type="${remote_build_cache_types[0]}"
   fi
   if [ -z "${remote_build_cache_url}" ]; then
     remote_build_cache_url="${remote_build_cache_urls[0]}"
@@ -196,6 +208,9 @@ validate_build_config() {
 execute_build() {
   local args
   args=(--build-cache --init-script "${INIT_SCRIPTS_DIR}/configure-remote-build-caching.gradle")
+  if [ -n "${remote_build_cache_type}" ]; then
+    args+=("-Ddevelocity.build-validation.remoteBuildCacheType=${remote_build_cache_type}")
+  fi
   if [ -n "${remote_build_cache_url}" ]; then
     args+=("-Ddevelocity.build-validation.remoteBuildCacheUrl=${remote_build_cache_url}")
   fi
@@ -360,7 +375,7 @@ EOF
   print_interactive_text "${text}"
 }
 
-explain_remote_build_cache_url() {
+explain_collect_remote_build_cache() {
   local text
   IFS='' read -r -d '' text <<EOF
 The local build will connect to the given remote build cache. The remote build
@@ -369,11 +384,30 @@ EOF
   print_interactive_text "${text}"
 }
 
-collect_remote_build_cache_url() {
-  local default_remote_cache="<project default>"
-  prompt_for_setting "What is the remote build cache url to use?" "${remote_build_cache_url}" "${default_remote_cache}" remote_build_cache_url
+collect_remote_build_cache() {
+  collect_remote_build_cache_type
+  collect_remote_build_cache_url
+}
 
-  if [[ "${remote_build_cache_url}" == "${default_remote_cache}" ]]; then
+collect_remote_build_cache_type() {
+  local default_remote_cache_type="<project default>"
+  prompt_for_setting "What is the remote build cache connector type to use? [develocity, gradle-enterprise, http, or <BLANK>]" "${remote_build_cache_type}" "${default_remote_cache_type}" remote_build_cache_type
+
+  if [[ -n "${remote_build_cache_type}" && "${remote_build_cache_type}" != 'http' && "${remote_build_cache_type}" != 'gradle-enterprise' && "${remote_build_cache_type}" != 'develocity' ]]; then
+    print_bl
+    die "ERROR: Invalid value for remote build cache connector type. Values are 'develocity', 'gradle-enterprise', 'http', or <BLANK> for project default." "${INVALID_INPUT}"
+  fi
+
+  if [[ "${remote_build_cache_type}" == "${default_remote_cache_type}" ]]; then
+    remote_build_cache_type=''
+  fi
+}
+
+collect_remote_build_cache_url() {
+  local default_remote_cache_url="<project default>"
+  prompt_for_setting "What is the remote build cache url to use?" "${remote_build_cache_url}" "${default_remote_cache_url}" remote_build_cache_url
+
+  if [[ "${remote_build_cache_url}" == "${default_remote_cache_url}" ]]; then
     remote_build_cache_url=''
   fi
 }
@@ -463,6 +497,10 @@ generate_command_to_repeat_experiment() {
 
   if [ -n "${mapping_file}" ]; then
     cmd+=("-m" "${mapping_file}")
+  fi
+
+  if [ -n "${remote_build_cache_type}" ]; then
+    cmd+=("-y" "${remote_build_cache_type}")
   fi
 
   if [ -n "${remote_build_cache_url}" ]; then

@@ -3,6 +3,7 @@
 # Created by argbash-init v2.10.0
 # ARG_OPTIONAL_SINGLE([first-build-ci],[1],[])
 # ARG_OPTIONAL_SINGLE([mapping-file],[m],[])
+# ARG_OPTIONAL_SINGLE([remote-build-cache-type],[y],[])
 # ARG_OPTIONAL_SINGLE([remote-build-cache-url],[u],[])
 # ARG_OPTIONAL_BOOLEAN([fail-if-not-fully-cacheable],[f],[])
 # ARG_HELP([This function is overridden later on.])
@@ -30,6 +31,7 @@ function print_help() {
   print_option_usage -p
   print_option_usage -t
   print_option_usage -a
+  print_option_usage "-y, --remote-build-cache-type" "Specifies the remote build cache connector type to use in the second build run locally. Values are 'develocity', 'gradle-enterprise', or 'http'."
   print_option_usage "-u, --remote-build-cache-url" "Specifies the URL for the remote build cache to access in the second build run locally."
   print_option_usage -s
   print_option_usage -e

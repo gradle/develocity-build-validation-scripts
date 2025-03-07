@@ -119,6 +119,12 @@ detect_warnings_from_build_scans() {
     if [ -z "${build_outcomes[i]}" ]; then
       warnings+=("Failed to fetch build scan data for the ${ORDINALS[i]} build.")
     fi
+    if [ "${remote_build_cache_types[i]}" == "unknown" ]; then
+      # "Develocity Build Validation Scripts" is specifically mentioned as to
+      # not imply Develocity itself does not work with other remote build cache
+      # implementations.
+      warnings+=("The ${ORDINALS[i]} build ran using a remote build cache implementation not officially supported by the experiment.")
+    fi
   done
 
   local value_mismatch=false
@@ -126,12 +132,20 @@ detect_warnings_from_build_scans() {
      [[ "${git_repos[0]}" != "${git_repos[1]}" ]] ||
      [[ "${git_branches[0]}" != "${git_branches[1]}" ]] ||
      [[ "${git_commit_ids[0]}" != "${git_commit_ids[1]}" ]] ||
-     [[ "${requested_tasks[0]}" != "${requested_tasks[1]}" ]]; then
+     [[ "${requested_tasks[0]}" != "${requested_tasks[1]}" ]] ||
+     [[ "${remote_build_cache_urls[0]}" != "${remote_build_cache_urls[1]}" ]] ||
+     [[ "${remote_build_cache_class_names[0]}" != "${remote_build_cache_class_names[1]}" ]]; then
     value_mismatch=true
   fi
 
   if [[ "${value_mismatch}" == "true" ]]; then
     warnings+=("Differences were detected between the two builds. This may skew the outcome of the experiment.")
+  fi
+  if [ "${remote_build_cache_urls[0]}" != "${remote_build_cache_urls[1]}" ]; then
+    warnings+=("The two builds ran with different remote build cache URLs configured.")
+  fi
+  if [ "${remote_build_cache_class_names[0]}" != "${remote_build_cache_class_names[1]}" ]; then
+    warnings+=("The two builds ran using different remote build cache implementations.")
   fi
   if [[ "${unknown_values}" == "true" ]]; then
     warnings+=("Some of the build properties could not be determined. This makes it uncertain if the experiment has run correctly.")
