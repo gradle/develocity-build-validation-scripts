@@ -23,14 +23,12 @@ settingsEvaluated { Settings settings ->
                 failInvalidRemoteBuildCacheType(remoteBuildCacheType, expDir)
             }
 
-            if (isTopLevelBuild && missingRequiredPlugin(settings, remoteBuildCacheType)) {
-                failMissingRequiredPlugin(remoteBuildCacheType, expDir, docsRoot)
-            }
-
             def remoteBuildCacheImplementation = getRemoteBuildCacheImplementation(settings, remoteBuildCacheType)
             if (remoteBuildCacheImplementation) {
                 logger.debug("Configuring remote build cache implementation for '${settings.rootProject.name}' as: ${remoteBuildCacheImplementation}")
                 remote(remoteBuildCacheImplementation)
+            } else if (isTopLevelBuild) {
+                failMissingRequiredImplementation(remoteBuildCacheType, expDir, docsRoot)
             }
         }
 
@@ -63,17 +61,12 @@ static boolean isInvalidRemoteBuildCacheType(String remoteBuildCacheType) {
     return !['develocity', 'gradle-enterprise', 'http'].contains(remoteBuildCacheType)
 }
 
-static boolean missingRequiredPlugin(Settings settings, String type) {
-    return type == "develocity" && !settings.pluginManager.hasPlugin('com.gradle.develocity')
-        || type == "gradle-enterprise" && !settings.pluginManager.hasPlugin('com.gradle.enterprise')
-}
-
 static Class<? extends BuildCache> getRemoteBuildCacheImplementation(Settings settings, String type) {
-    if (type == "develocity") {
+    if (type == 'develocity' && settings.pluginManager.hasPlugin('com.gradle.develocity')) {
         return settings.develocity.buildCache
-    } else if (type == "gradle-enterprise") {
+    } else if (type == 'gradle-enterprise' && settings.pluginManager.hasPlugin('com.gradle.enterprise')) {
         return settings.gradleEnterprise.buildCache
-    } else if (type == "http") {
+    } else if (type == 'http') {
         return HttpBuildCache
     }
     return null
@@ -100,9 +93,7 @@ static void failInvalidRemoteBuildCacheType(String remoteBuildCacheType, String 
     throw new IllegalStateException(message)
 }
 
-// Included builds may not have the necessary plugin applied.
-// Only fail if the top-level build is missing the required extension.
-static void failMissingRequiredPlugin(String remoteBuildCacheType, String expDir, String docsRoot) {
+static void failMissingRequiredImplementation(String remoteBuildCacheType, String expDir, String docsRoot) {
     def errorFile = new File(expDir, 'errors.txt')
     errorFile.text = "Remote build cache connector type '${remoteBuildCacheType}' requested, but the required plugin is not applied."
     if (remoteBuildCacheType == 'develocity') {
