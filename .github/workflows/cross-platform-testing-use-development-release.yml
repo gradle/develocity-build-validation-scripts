@@ -81,13 +81,13 @@ jobs:
         run: ./05-validate-remote-build-caching-ci-local.sh -1 https://ge.solutions-team.gradle.com/s/dgndhzndrffks -s https://ge.solutions-team.gradle.com -u https://ge.solutions-team.gradle.com/cache/
       - name: Run Maven Experiment 01
         working-directory: develocity-maven-build-validation
-        run: ./01-validate-local-build-caching-same-location.sh -r https://github.com/gradle/maven-build-scan-quickstart.git -g test -s https://ge.solutions-team.gradle.com
+        run: ./01-validate-local-build-caching-same-location.sh -r https://github.com/gradle/maven-build-scan-quickstart.git -g test -s https://ge.solutions-team.gradle.com -a '-B'
       - name: Run Maven Experiment 02
         working-directory: develocity-maven-build-validation
-        run: ./02-validate-local-build-caching-different-locations.sh -r https://github.com/gradle/maven-build-scan-quickstart.git -g test -s https://ge.solutions-team.gradle.com
+        run: ./02-validate-local-build-caching-different-locations.sh -r https://github.com/gradle/maven-build-scan-quickstart.git -g test -s https://ge.solutions-team.gradle.com -a '-B'
       - name: Run Maven Experiment 03
         working-directory: develocity-maven-build-validation
         run: ./03-validate-remote-build-caching-ci-ci.sh -1 https://ge.solutions-team.gradle.com/s/sysk4hrdbkja6 -2 https://ge.solutions-team.gradle.com/s/f7yfwfxqzg5us
       - name: Run Maven Experiment 04
         working-directory: develocity-maven-build-validation
-        run: ./04-validate-remote-build-caching-ci-local.sh -1 https://ge.solutions-team.gradle.com/s/4zpdvd2l2ualu -s https://ge.solutions-team.gradle.com
+        run: ./04-validate-remote-build-caching-ci-local.sh -1 https://ge.solutions-team.gradle.com/s/4zpdvd2l2ualu -s https://ge.solutions-team.gradle.com -a '-B'
