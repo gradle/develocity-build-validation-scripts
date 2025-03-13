@@ -38,6 +38,10 @@ invoke_maven() {
     die "Unable to find the Maven executable. Add MAVEN_INSTALL_DIR/bin to your PATH environment variable, or install the Maven Wrapper."
   fi
 
+  if [[ -x "${SCRIPT_DIR}/hooks/pre-build-${run_num+1}.sh" ]]; then
+    "${SCRIPT_DIR}/hooks/pre-build-${run_num+1}.sh"
+  fi
+
   local extension_classpath
   extension_classpath="${CONFIGURE_DEVELOCITY_JAR}"
 

@@ -7,6 +7,10 @@ git_checkout_project() {
    else
      git_clone_project "${target_subdir}"
    fi
+
+   if [ -x "${SCRIPT_DIR}/hooks/post-checkout.sh" ]; then
+     "${SCRIPT_DIR}/hooks/post-checkout.sh"
+   fi
 }
 
 git_clone_project() {

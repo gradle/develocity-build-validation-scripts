@@ -12,6 +12,10 @@ invoke_gradle() {
     cd "${project_dir}" > /dev/null 2>&1 || die "ERROR: Subdirectory ${project_dir} (set with --project-dir) does not exist in ${project_name}" "${INVALID_INPUT}"
   fi
 
+  if [[ -x "${SCRIPT_DIR}/hooks/pre-build-${run_num+1}.sh" ]]; then
+    "${SCRIPT_DIR}/hooks/pre-build-${run_num+1}.sh"
+  fi
+
   args+=(
     --init-script "${INIT_SCRIPTS_DIR}/develocity-injection.gradle"
     --init-script "${INIT_SCRIPTS_DIR}/configure-build-validation.gradle"
