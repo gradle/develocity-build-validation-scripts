@@ -23,7 +23,7 @@ invoke_gradle() {
     args+=(
       -Dgradle.plugin-repository.url=https://plugins.gradle.org/m2
       -Ddevelocity.plugin.version="3.14.1"
-      -Ddevelocity.ccud-plugin.version="2.1"
+      -Ddevelocity.ccud-plugin.version="2.2"
     )
   fi
 
