@@ -8,3 +8,4 @@
 - [FIX] Gradle experiments do not disable background Build Scan publication
 - [FIX] Common Custom User Data Gradle plugin not injected for Gradle builds
 - [FIX] Build Scan publishing is not enforced for the Develocity Gradle plugin
+- [FIX] Experiments fail when `--enable-develocity` is used on a build that already applies the Develocity Gradle plugin
