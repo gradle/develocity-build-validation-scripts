@@ -62,7 +62,7 @@ execute() {
   rename_project_dir "build_${project_name}" "second-build_${project_name}"
 
   print_bl
-  fetch_build_cache_metrics
+  process_build_scan_data
 
   print_bl
   print_summary
@@ -110,7 +110,7 @@ wizard_execute() {
   print_bl
   explain_measure_build_results
   print_bl
-  fetch_build_cache_metrics
+  process_build_scan_data
   print_bl
   explain_and_print_summary
 }
@@ -149,8 +149,8 @@ print_maven_command() {
    info "./mvnw -Dscan -Dscan.tag.${EXP_SCAN_TAG} -Dscan.value.runId=${RUN_ID} -Dpts.enabled=false clean ${tasks}$(print_extra_args)"
  }
 
-fetch_build_cache_metrics() {
-  process_build_scan_data_online
+process_build_scan_data() {
+  process_build_scan_data_online "$LOGGING_BRIEF" "$(query_run_id)"
 }
 
 print_introduction() {
