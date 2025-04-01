@@ -124,10 +124,12 @@ runs:
     - name: Archive receipt
       id: upload-artifact
       uses: actions/upload-artifact@v4
+      if: always()
       with:
         name: experiment-1-receipt-${{ github.job }}${{ strategy.job-total > 1 && format('-{0}', strategy.job-index) || '' }}
         path: develocity-gradle-build-validation/.data/01-validate-incremental-building/latest*/exp1-*.receipt
     - name: Add artifact link to summary
+      if: always()
       run: |
         echo "-------------" >> $GITHUB_STEP_SUMMARY
         echo "Download receipt: ${{ steps.upload-artifact.outputs.artifact-url }}" >> $GITHUB_STEP_SUMMARY
