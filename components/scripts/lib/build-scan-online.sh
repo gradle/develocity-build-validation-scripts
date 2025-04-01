@@ -2,36 +2,30 @@
 
 readonly LOGGING_BRIEF='brief_logging'
 readonly LOGGING_VERBOSE='verbose_logging'
+readonly RUN_ID_NONE=''
 
 # Main entrypoint for processing data online using the Build Scan summary tool.
 # All scripts should call this function to fetch Build Scan data used in the
 # experiment summary.
 #
-# USAGE: fetch_build_scans_and_build_time_metrics <logging_level> <query>
+# USAGE:   fetch_build_scans_and_build_time_metrics <logging_level> <run_id>
+# EXAMPLE: fetch_build_scans_and_build_time_metrics "$LOGGING_BRIEF" "$RUN_ID"
 #
-# <logging_level> should be set using either LOGGING_BRIEF or LOGGING_VERBOSE
-#                 constant, e.g., "$LOGGING_BRIEF"
-# <query>         should be set using either query_none or query_run_id
-#                 function, e.g., "$(query_none)"
+# <logging_level> should be set to the constant LOGGING_BRIEF or LOGGING_VERBOSE
+# <run_id>        should be set to the constant RUN_ID or RUN_ID_NONE depending
+#                 on whether the builds being queried for have a common run id,
+#                 which will only be the case when both builds were produced
+#                 during script execution
 process_build_scan_data_online() {
   local logging_level="$1"
-  local query="$2"
+  local run_id="$2"
 
   # Always call since it will only read if the metadata file exists
   read_build_scan_metadata
 
   local build_scan_data
-  build_scan_data="$(fetch_build_scan_data "${@}")"
+  build_scan_data="$(fetch_build_scan_data "$logging_level" "$run_id")"
   parse_build_scans_and_build_time_metrics "${build_scan_data}"
-}
-
-query_none() {
-  # Intentionally no-op so query definitions can appear consistent
-  true
-}
-
-query_run_id() {
-  echo "value:\"Experiment run id=$RUN_ID\""
 }
 
 read_build_scan_metadata() {
@@ -77,7 +71,7 @@ fetch_single_build_scan() {
   local build_scan_url="$1"
 
   local build_scan_data
-  build_scan_data="$(fetch_build_scan_data "$LOGGING_VERBOSE" "$(query_none)")"
+  build_scan_data="$(fetch_build_scan_data "$LOGGING_VERBOSE" "$RUN_ID_NONE")"
 
   parse_single_build_scan "${build_scan_data}"
 }
@@ -90,7 +84,7 @@ fetch_single_build_scan() {
 #          be done inside this function.
 fetch_build_scan_data() {
   local logging_level="$1"
-  local query="$2"
+  local run_id="$2"
 
   if [[ "${debug_mode}" == "on" ]]; then
     args+=("--debug")
@@ -112,8 +106,8 @@ fetch_build_scan_data() {
     args+=("--build-scan-availability-wait-timeout" "60")
   fi
 
-  if [[ -n "${query}" ]]; then
-    args+=("--query" "$query")
+  if [[ -n "${run_id}" ]]; then
+    args+=("--experiment-run-id" "$run_id")
   fi
 
   for run_num in "${!build_scan_urls[@]}"; do

@@ -117,7 +117,7 @@ validate_required_args() {
 }
 
 process_build_scan_data() {
-  process_build_scan_data_online "$LOGGING_VERBOSE" "$(query_none)"
+  process_build_scan_data_online "$LOGGING_VERBOSE" "$RUN_ID_NONE"
 }
 
 # Overrides summary.sh#print_experiment_specific_summary_info
