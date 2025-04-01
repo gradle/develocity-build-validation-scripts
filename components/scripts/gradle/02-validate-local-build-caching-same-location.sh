@@ -145,7 +145,7 @@ print_gradle_command() {
 }
 
 process_build_scan_data() {
-  process_build_scan_data_online "$LOGGING_BRIEF" "$(query_run_id)"
+  process_build_scan_data_online "$LOGGING_BRIEF" "$RUN_ID"
 }
 
 print_introduction() {

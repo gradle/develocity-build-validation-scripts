@@ -220,7 +220,7 @@ execute_build() {
 }
 
 process_build_scan_data() {
-  process_build_scan_data_online "$LOGGING_BRIEF" "$(query_none)"
+  process_build_scan_data_online "$LOGGING_BRIEF" "$RUN_ID_NONE"
 }
 
 # Overrides summary.sh#print_experiment_specific_summary_info
