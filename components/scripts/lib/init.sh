@@ -14,8 +14,33 @@ make_symlink_to_latest_experiment_dir() {
   ln -s "${EXP_DIR}" "${LINK_NAME}" > /dev/null 2>&1
 }
 
+# Below is an explanation of what constitutes a 'run_id'.
+#
+#    0:     A static digit '1'
+#    1-5:   A random number, left-padded with '0', then reversed
+#    6-16:  The current number of seconds since epoch, truncated to 10 digits, then reversed
+#    17-18: The experiment number
+#
+# When converted to hex, this creates a pseudorandom 15 digit value. The static
+# '1' and number of seconds since epoch are truncated to ensure the value
+# remains at 15 digits.
+#
+# The order of components is very intentional. With the exception of the static
+# value at the beginning, the most significant digits are also the most
+# variable. This gives the best illusion of "random".
+#
+# The 'run_id' does not need to be cryptographically secure, only random
+# *enough* such that it's extremely unlikely that two identical 'run_id's will
+# ever be generated. For a collision to occur, the same experiment number during
+# the same second must generate the same random number. It is theoretically
+# possible to have another chance for collision in the future since the number
+# of seconds since epoch is truncated, but this is only possible once every ~317
+# years.
 generate_run_id() {
-  printf '%x' "$(date +%s)"
+  local time_component rand_component
+  time_component="$(printf "%.10s" "$(date +%s | rev)")"
+  rand_component="$(rand=$RANDOM; printf '%05d' "$rand" | rev)"
+  printf '%x' "1$rand_component$time_component${EXP_NO}"
 }
 
 # Init common constants
