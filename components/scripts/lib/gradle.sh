@@ -15,23 +15,29 @@ invoke_gradle() {
   args+=(
     --init-script "${INIT_SCRIPTS_DIR}/develocity-injection.gradle"
     --init-script "${INIT_SCRIPTS_DIR}/configure-build-validation.gradle"
-    -Ddevelocity.injection.init-script-name=develocity-injection.gradle
-    -Ddevelocity.injection-enabled=true
+    -Ddevelocity-injection.init-script-name=develocity-injection.gradle
+    -Ddevelocity-injection.enabled=true
   )
 
   if [ "$enable_develocity" == "on" ]; then
     args+=(
-      -Dgradle.plugin-repository.url=https://plugins.gradle.org/m2
-      -Ddevelocity.plugin.version="3.14.1"
-      -Ddevelocity.ccud-plugin.version="2.2.1"
+      -Ddevelocity-injection.plugin-repository.url=https://plugins.gradle.org/m2
+      -Ddevelocity-injection.develocity-plugin.version="3.14.1"
+      -Ddevelocity-injection.ccud-plugin.version="2.2.1"
     )
   fi
 
   if [ -n "${develocity_server}" ]; then
     args+=(
-      -Ddevelocity.url="${develocity_server}"
-      -Ddevelocity.enforce-url=true
-      -Ddevelocity.allow-untrusted-server=false
+      -Ddevelocity-injection.url="${develocity_server}"
+      -Ddevelocity-injection.enforce-url=true
+      -Ddevelocity-injection.allow-untrusted-server=false
+    )
+  fi
+
+  if [[ "${debug_mode}" == "on" ]]; then
+    args+=(
+      -Ddevelocity-injection.debug=true
     )
   fi
 
@@ -41,8 +47,8 @@ invoke_gradle() {
     -Ddevelocity.build-validation.runId="${RUN_ID}"
     -Ddevelocity.build-validation.runNum="${run_num}"
     -Ddevelocity.build-validation.scriptsVersion="${SCRIPT_VERSION}"
-    -Ddevelocity.build-scan.upload-in-background=false
-    -Ddevelocity.capture-file-fingerprints=true
+    -Ddevelocity-injection.upload-in-background=false
+    -Ddevelocity-injection.capture-file-fingerprints=true
     -Dpts.enabled=false
   )
 
