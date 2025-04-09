@@ -8,8 +8,13 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.apache.maven:maven-core:3.6.3")  // intentionally compiling against an older version to preserve compatibility with older versions of Maven
-    compileOnly("com.gradle:develocity-maven-extension:1.23.2")
+    compileOnly("org.apache.maven:maven-core:3.6.3") {
+        because("compatibility with older versions of Maven is required")
+    }
+    compileOnly("com.gradle:gradle-enterprise-maven-extension:1.20.1") {
+        because("compatibility with older versions of the Gradle Enterprise Maven extension is required")
+    }
+    compileOnly("com.gradle:develocity-maven-extension:2.0")
     implementation("com.gradle:develocity-maven-extension-adapters:1.0")
 }
 
