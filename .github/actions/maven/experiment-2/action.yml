@@ -123,7 +123,7 @@ runs:
           ${RUNNER_DEBUG:+"--debug"}
         EXPERIMENT_EXIT_CODE=$?
 
-        # Set step outputs
+        # Set the Build Scan urls as outputs
         BUILD_SCAN_1=$(grep -m 1 "first build" ${RECEIPT_FILE} | sed 's/.* //')
         BUILD_SCAN_2=$(grep -m 1 "second build" ${RECEIPT_FILE} | sed 's/.* //')
        
