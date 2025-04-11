@@ -1,11 +1,31 @@
 #!/usr/bin/env bash
 
-# This is a helper function for the common pattern of reading Build Scan metadata
-# from the build-scans.csv file, then retrieving build metrics using the
-# Develocity API.
+readonly LOGGING_BRIEF='brief_logging'
+readonly LOGGING_VERBOSE='verbose_logging'
+readonly RUN_ID_NONE=''
+
+# Main entrypoint for processing data online using the Build Scan summary tool.
+# All scripts should call this function to fetch Build Scan data used in the
+# experiment summary.
+#
+# USAGE:   fetch_build_scans_and_build_time_metrics <logging_level> <run_id>
+# EXAMPLE: fetch_build_scans_and_build_time_metrics "$LOGGING_BRIEF" "$RUN_ID"
+#
+# <logging_level> should be set to the constant LOGGING_BRIEF or LOGGING_VERBOSE
+# <run_id>        should be set to the constant RUN_ID or RUN_ID_NONE depending
+#                 on whether the builds being queried for have a common run id,
+#                 which will only be the case when both builds were produced
+#                 during script execution
 process_build_scan_data_online() {
+  local logging_level="$1"
+  local run_id="$2"
+
+  # Always call since it will only read if the metadata file exists
   read_build_scan_metadata
-  fetch_build_scans_and_build_time_metrics 'brief_logging' "${build_scan_urls[@]}"
+
+  local build_scan_data
+  build_scan_data="$(fetch_build_scan_data "$logging_level" "$run_id")"
+  parse_build_scans_and_build_time_metrics "${build_scan_data}"
 }
 
 read_build_scan_metadata() {
@@ -46,38 +66,25 @@ is_build_scan_metadata_missing() {
   return 0
 }
 
+# Used by CI / Local experiments to fetch data for the first CI build.
 fetch_single_build_scan() {
   local build_scan_url="$1"
 
   local build_scan_data
-  build_scan_data="$(fetch_build_scan_data 'verbose_logging' "${build_scan_url}")"
+  build_scan_data="$(fetch_build_scan_data "$LOGGING_VERBOSE" "$RUN_ID_NONE")"
 
   parse_single_build_scan "${build_scan_data}"
 }
 
-# The value of logging_level should be either 'brief_logging' or
-# 'verbose_logging'
-fetch_build_scans_and_build_time_metrics() {
-  local logging_level="$1"
-  shift
-  local build_scan_urls=("$@")
-
-  if [[ "${logging_level}" == 'verbose_logging' ]]; then
-    info "Fetching build scan data"
-  fi
-
-  local build_scan_data
-  build_scan_data="$(fetch_build_scan_data "${logging_level}" "${build_scan_urls[@]}")"
-
-  parse_build_scans_and_build_time_metrics "${build_scan_data}"
-}
-
-# Note: Callers of this function require stdout to be clean. No logging can be
-#       done inside this function.
+# WARNING: Experiment scripts should not call this function directly and instead
+#          use the process_build_scan_data_online or fetch_single_build_scan
+#          function.
+#
+# WARNING: Callers of this function require stdout to be clean. No logging can
+#          be done inside this function.
 fetch_build_scan_data() {
   local logging_level="$1"
-  shift
-  local build_scan_urls=("$@")
+  local run_id="$2"
 
   if [[ "${debug_mode}" == "on" ]]; then
     args+=("--debug")
@@ -91,12 +98,16 @@ fetch_build_scan_data() {
     args+=("--network-settings-file" "${SCRIPT_DIR}/network.settings")
   fi
 
-  if [[ "${logging_level}" == "brief_logging" ]]; then
+  if [[ "${logging_level}" == "${LOGGING_BRIEF}" ]]; then
     args+=("--brief-logging")
   fi
 
   if [[ "${fail_if_not_fully_cacheable}" == "on" ]]; then
     args+=("--build-scan-availability-wait-timeout" "60")
+  fi
+
+  if [[ -n "${run_id}" ]]; then
+    args+=("--experiment-run-id" "$run_id")
   fi
 
   for run_num in "${!build_scan_urls[@]}"; do

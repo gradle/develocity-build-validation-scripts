@@ -62,7 +62,7 @@ execute() {
   rename_project_dir "build_${project_name}" "second-build_${project_name}"
 
   print_bl
-  fetch_build_cache_metrics
+  process_build_scan_data
 
   print_bl
   print_summary
@@ -109,7 +109,7 @@ wizard_execute() {
   print_bl
   explain_measure_build_results
   print_bl
-  fetch_build_cache_metrics
+  process_build_scan_data
   print_bl
   explain_and_print_summary
 }
@@ -139,8 +139,8 @@ print_gradle_command() {
     info "./gradlew --no-build-cache -Dscan.tag.${EXP_SCAN_TAG} -Dscan.value.runId=${RUN_ID} -Dpts.enabled=false $*$(print_extra_args)"
 }
 
-fetch_build_cache_metrics() {
-  process_build_scan_data_online
+process_build_scan_data() {
+  process_build_scan_data_online "$LOGGING_BRIEF" "$RUN_ID"
 }
 
 # Overrides summary.sh#print_performance_characteristics

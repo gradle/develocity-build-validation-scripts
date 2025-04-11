@@ -66,7 +66,7 @@ execute() {
   execute_build
 
   print_bl
-  process_build_scan_data_online
+  process_build_scan_data
 
   print_bl
   print_summary
@@ -130,7 +130,7 @@ wizard_execute() {
   print_bl
   explain_measure_build_results
   print_bl
-  process_build_scan_data_online
+  process_build_scan_data
   print_bl
   explain_and_print_summary
 }
@@ -222,6 +222,10 @@ execute_build() {
   info "./gradlew --build-cache -Dscan.tag.${EXP_SCAN_TAG} -Dscan.value.runId=${RUN_ID} -Dpts.enabled=false clean ${tasks}$(print_extra_args)"
 
   invoke_gradle 1 "${args[@]}"
+}
+
+process_build_scan_data() {
+  process_build_scan_data_online "$LOGGING_BRIEF" "$RUN_ID_NONE"
 }
 
 # Overrides summary.sh#print_experiment_specific_summary_info

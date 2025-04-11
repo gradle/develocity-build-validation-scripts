@@ -52,7 +52,7 @@ main() {
 }
 
 execute() {
-  fetch_build_scans
+  process_build_scan_data
   make_experiment_dir
 
   print_bl
@@ -91,7 +91,7 @@ wizard_execute() {
   explain_command_to_repeat_experiment_after_collecting_parameters
 
   print_bl
-  fetch_build_scans
+  process_build_scan_data
   make_experiment_dir
 
   print_bl
@@ -116,8 +116,8 @@ validate_required_args() {
   fi
 }
 
-fetch_build_scans() {
-  fetch_build_scans_and_build_time_metrics 'verbose_logging' "${build_scan_urls[@]}"
+process_build_scan_data() {
+  process_build_scan_data_online "$LOGGING_VERBOSE" "$RUN_ID_NONE"
 }
 
 # Overrides summary.sh#print_experiment_specific_summary_info

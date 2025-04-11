@@ -54,14 +54,13 @@ repositories {
         }
     }
     mavenCentral()
-
 }
 
 val isDevelopmentRelease = !hasProperty("finalRelease")
 val releaseVersion = releaseVersion()
 val releaseNotes = releaseNotes()
 val distributionVersion = distributionVersion()
-val buildScanSummaryVersion = "1.0.4-2024.1"
+val buildScanSummaryVersion = "1.0.5-2024.1"
 
 allprojects {
     version = releaseVersion.get()
