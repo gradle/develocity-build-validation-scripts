@@ -64,7 +64,7 @@ The build validation scripts are compatible with a large range of Maven versions
 Use the following command to download and unpack the build validation scripts for Maven to the current directory:
 
 ```bash
-curl -s -L -O https://github.com/gradle/develocity-build-validation-scripts/releases/download/v2.7.3/develocity-maven-build-validation-2.7.3.zip && unzip -q -o develocity-maven-build-validation-2.7.3.zip
+curl -s -L -O https://github.com/gradle/develocity-build-validation-scripts/releases/download/v2.8/develocity-maven-build-validation-2.8.zip && unzip -q -o develocity-maven-build-validation-2.8.zip
 ```
 
 ## Structure
