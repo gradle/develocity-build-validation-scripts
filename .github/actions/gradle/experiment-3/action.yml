@@ -129,12 +129,6 @@ runs:
         
         echo "buildScanFirstBuild=$BUILD_SCAN_1" >> $GITHUB_OUTPUT
         echo "buildScanSecondBuild=$BUILD_SCAN_2" >> $GITHUB_OUTPUT
-        
-        # Copy receipt to a predictable location
-        RECEIPT_FILE=".data/03-validate-local-build-caching-different-locations/latest/exp3-*.receipt"
-        if [ -f ${RECEIPT_FILE} ]; then
-          cp ${RECEIPT_FILE} ../receipt.txt
-        fi
 
         exit $EXPERIMENT_EXIT_CODE
       shell: bash
@@ -144,12 +138,13 @@ runs:
       if: always()
       with:
         name: experiment-3-receipt-${{ github.job }}${{ strategy.job-total > 1 && format('-{0}', strategy.job-index) || '' }}
-        path: receipt.txt
+        path: develocity-gradle-build-validation/.data/03-validate-local-build-caching-different-locations/latest/exp3-*.receipt
     - name: Fill GitHub summary
       if: always()
       run: |
-        if [ -f "receipt.txt" ]; then
-          cat receipt.txt >> $GITHUB_STEP_SUMMARY
+        RECEIPT_FILE="develocity-gradle-build-validation/.data/03-validate-local-build-caching-different-locations/latest/exp3-*.receipt"
+        if [ -f ${RECEIPT_FILE} ]; then
+          cat ${RECEIPT_FILE} >> $GITHUB_STEP_SUMMARY
           echo "-------------" >> $GITHUB_STEP_SUMMARY
           echo "Download receipt: ${{ steps.upload-artifact.outputs.artifact-url }}" >> $GITHUB_STEP_SUMMARY
         fi
