@@ -105,6 +105,9 @@ runs:
         # Navigate into the folder containing the validation scripts
         cd develocity-gradle-build-validation
 
+        # Do not exit on error to allow post-actions
+        set +e
+
         # Run the experiment
         ./02-validate-local-build-caching-same-location.sh \
           ${ARG_GIT_REPO:+"-r" "$ARG_GIT_REPO"} \
@@ -118,25 +121,31 @@ runs:
           ${ARG_DEVELOCITY_ENABLE:+"-e"} \
           ${ARG_FAIL_IF_NOT_FULLY_CACHEABLE:+"-f"} \
           ${RUNNER_DEBUG:+"--debug"}
+        EXPERIMENT_EXIT_CODE=$?
 
         # Set the Build Scan urls as outputs
-        RECEIPT_FILE=".data/02-validate-local-build-caching-same-location/latest/exp2-*.receipt"
         BUILD_SCAN_1=$(grep -m 1 "first build" ${RECEIPT_FILE} | sed 's/.* //')
         BUILD_SCAN_2=$(grep -m 1 "second build" ${RECEIPT_FILE} | sed 's/.* //')
         
         echo "buildScanFirstBuild=$BUILD_SCAN_1" >> $GITHUB_OUTPUT
         echo "buildScanSecondBuild=$BUILD_SCAN_2" >> $GITHUB_OUTPUT
         
-        cat $RECEIPT_FILE >> $GITHUB_STEP_SUMMARY
+        exit $EXPERIMENT_EXIT_CODE
       shell: bash
     - name: Archive receipt
       id: upload-artifact
       uses: actions/upload-artifact@v4
+      if: always()
       with:
         name: experiment-2-receipt-${{ github.job }}${{ strategy.job-total > 1 && format('-{0}', strategy.job-index) || '' }}
-        path: develocity-gradle-build-validation/.data/02-validate-local-build-caching-same-location/latest*/exp2-*.receipt
-    - name: Add artifact link to summary
+        path: develocity-gradle-build-validation/.data/02-validate-local-build-caching-same-location/latest/exp2-*.receipt
+    - name: Fill GitHub summary
+      if: always()
       run: |
-        echo "-------------" >> $GITHUB_STEP_SUMMARY
-        echo "Download receipt: ${{ steps.upload-artifact.outputs.artifact-url }}" >> $GITHUB_STEP_SUMMARY
+        RECEIPT_FILE="develocity-gradle-build-validation/.data/02-validate-local-build-caching-same-location/latest/exp2-*.receipt"
+        if [ -f ${RECEIPT_FILE} ]; then
+          cat ${RECEIPT_FILE} >> $GITHUB_STEP_SUMMARY
+          echo "-------------" >> $GITHUB_STEP_SUMMARY
+          echo "Download receipt: ${{ steps.upload-artifact.outputs.artifact-url }}" >> $GITHUB_STEP_SUMMARY
+        fi
       shell: bash
