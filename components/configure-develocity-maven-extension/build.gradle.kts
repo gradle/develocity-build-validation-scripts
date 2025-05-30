@@ -14,7 +14,7 @@ dependencies {
     compileOnly("com.gradle:gradle-enterprise-maven-extension:1.20.1") {
         because("compatibility with older versions of the Gradle Enterprise Maven extension is required")
     }
-    compileOnly("com.gradle:develocity-maven-extension:2.0")
+    compileOnly("com.gradle:develocity-maven-extension:2.0.1")
     implementation("com.gradle:develocity-maven-extension-adapters:1.0")
 }
 
