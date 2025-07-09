@@ -23,7 +23,7 @@ invoke_gradle() {
     args+=(
       -Ddevelocity-injection.plugin-repository.url=https://plugins.gradle.org/m2
       -Ddevelocity-injection.develocity-plugin.version="3.14.1"
-      -Ddevelocity-injection.ccud-plugin.version="2.2.1"
+      -Ddevelocity-injection.ccud-plugin.version="2.3"
     )
   fi
 
