@@ -20,7 +20,7 @@ jobs:
           - ubuntu-24.04
           - macos-13 # x86_64
           - macos-14 # aarch64
-          - windows-2019
+          - windows-2025
         # Only LTS versions greater than 8 are tested
         java-version: [ '8', '11', '17', '21' ]
         include:
@@ -30,7 +30,7 @@ jobs:
             shell: bash
           - os: macos-14
             shell: bash
-          - os: windows-2019
+          - os: windows-2025
             shell: wsl-bash
     defaults:
       run:
