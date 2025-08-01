@@ -59,7 +59,6 @@ repositories {
 val isDevelopmentRelease = !hasProperty("finalRelease")
 val releaseVersion = releaseVersion()
 val releaseNotes = releaseNotes()
-val distributionVersion = distributionVersion()
 val buildScanSummaryVersion = "1.0.5-2024.1"
 
 allprojects {
@@ -278,44 +277,37 @@ val copyLegacyMavenScripts by tasks.registering(Sync::class) {
     into(layout.buildDirectory.dir("scripts/maven-legacy"))
 }
 
-val assembleGradleScripts by tasks.registering(Zip::class) {
-    group = "build"
+val assembleGradleScripts by tasks.registering(AssembleScripts::class) {
     description = "Packages the Gradle experiment scripts in a zip archive."
-    archiveBaseName.set("develocity-gradle-build-validation")
-    archiveFileName.set(archiveBaseName.flatMap { a -> distributionVersion.map { v -> "$a-$v.zip" } })
-    from(copyGradleScripts)
-    into(archiveBaseName.get())
+    distributionName = "develocity-gradle-build-validation"
+    distributionContents.from(copyGradleScripts)
 }
 
-val assembleMavenScripts by tasks.registering(Zip::class) {
-    group = "build"
+val assembleMavenScripts by tasks.registering(AssembleScripts::class) {
     description = "Packages the Maven experiment scripts in a zip archive."
-    archiveBaseName.set("develocity-maven-build-validation")
-    archiveFileName.set(archiveBaseName.flatMap { a -> distributionVersion.map { v -> "$a-$v.zip" } })
-    from(copyMavenScripts)
-    into(archiveBaseName.get())
+    distributionName = "develocity-maven-build-validation"
+    distributionContents.from(copyMavenScripts)
 }
 
-val assembleLegacyGradleScripts by tasks.registering(Zip::class) {
-    group = "build"
+val assembleLegacyGradleScripts by tasks.registering(AssembleScripts::class) {
     description = "Packages the Gradle experiment scripts in a zip archive."
-    archiveBaseName.set("gradle-enterprise-gradle-build-validation")
-    archiveFileName.set(archiveBaseName.flatMap { a -> distributionVersion.map { v -> "$a-$v.zip" } })
-    from(copyLegacyGradleScripts)
-    into(archiveBaseName.get())
+    distributionName = "gradle-enterprise-gradle-build-validation"
+    distributionContents.from(copyLegacyGradleScripts)
 }
 
-val assembleLegacyMavenScripts by tasks.registering(Zip::class) {
+val assembleLegacyMavenScripts by tasks.registering(AssembleScripts::class) {
+    description = "Packages the Gradle experiment scripts in a zip archive."
+    distributionName = "gradle-enterprise-maven-build-validation"
+    distributionContents.from(copyLegacyMavenScripts)
+}
+
+tasks.withType<AssembleScripts>().configureEach {
     group = "build"
-    description = "Packages the Maven experiment scripts in a zip archive."
-    archiveBaseName.set("gradle-enterprise-maven-build-validation")
-    archiveFileName.set(archiveBaseName.flatMap { a -> distributionVersion.map { v -> "$a-$v.zip" } })
-    from(copyLegacyMavenScripts)
-    into(archiveBaseName.get())
+    distributionVersion = distributionVersion()
 }
 
 tasks.assemble {
-    dependsOn(assembleGradleScripts, assembleMavenScripts, assembleLegacyGradleScripts, assembleLegacyMavenScripts)
+    dependsOn(tasks.withType<AssembleScripts>())
 }
 
 val shellcheckGradleScripts by tasks.registering(Shellcheck::class) {
