@@ -42,10 +42,10 @@ abstract class ApplyArgbash @Inject constructor(
     fun applyArgbash() {
         val argbash = argbashHome.get().file("bin/argbash").asFile
         scriptTemplates.get().visit {
-            if(!isDirectory) {
-                val relPath = relativePath.parent.pathString
+            val parentRelativePath = relativePath.parent?.pathString
+            if (!isDirectory && parentRelativePath != null) {
                 val basename = file.nameWithoutExtension
-                val outputFile = outputDir.get().file("$relPath/$basename.sh").asFile
+                val outputFile = outputDir.get().file("$parentRelativePath/$basename.sh").asFile
                 outputFile.parentFile.mkdirs()
 
                 logger.info("Applying argbash to $file")
