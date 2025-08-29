@@ -89,7 +89,7 @@ dependencies {
     develocityComponents("com.gradle:build-scan-summary:$buildScanSummaryVersion")
     develocityMavenComponents("com.gradle:gradle-enterprise-maven-extension:1.18.4")
     mavenComponents(project(path = ":configure-develocity-maven-extension", configuration = "shadow"))
-    thirdPartyMavenComponents("com.gradle:common-custom-user-data-maven-extension:2.0.3")
+    thirdPartyMavenComponents("com.gradle:common-custom-user-data-maven-extension:2.0.4")
 }
 
 shellcheck {
