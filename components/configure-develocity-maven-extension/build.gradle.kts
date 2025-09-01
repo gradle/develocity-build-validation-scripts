@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("com.gradleup.shadow") version "9.0.2"
+    id("com.gradleup.shadow") version "9.1.0"
 }
 
 repositories {
