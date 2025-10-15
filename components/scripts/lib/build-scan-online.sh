@@ -103,7 +103,7 @@ fetch_build_scan_data() {
   fi
 
   if [[ "${fail_if_not_fully_cacheable}" == "on" ]]; then
-    args+=("--build-scan-availability-wait-timeout" "60")
+    args+=("--max-total-wait-time" "120")
   fi
 
   if [[ -n "${run_id}" ]]; then
