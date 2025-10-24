@@ -1,5 +1,8 @@
 name: Run Cross-Platform Tests (Use Development Release)
 
+permissions:
+  contents: read
+
 on:
   workflow_run:
     workflows: [Create Development Release]

@@ -1,5 +1,8 @@
 name: Create Production Release
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
     inputs:
