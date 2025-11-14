@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("com.gradleup.shadow") version "9.2.2"
+    id("com.gradleup.shadow") version "9.2.2.1"
 }
 
 repositories {
@@ -14,7 +14,7 @@ dependencies {
     compileOnly("com.gradle:gradle-enterprise-maven-extension:1.20.1") {
         because("compatibility with older versions of the Gradle Enterprise Maven extension is required")
     }
-    compileOnly("com.gradle:develocity-maven-extension:2.2")
+    compileOnly("com.gradle:develocity-maven-extension:2.2.1")
     implementation("com.gradle:develocity-maven-extension-adapters:1.0")
 }
 
