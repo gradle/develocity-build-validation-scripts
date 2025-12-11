@@ -45,14 +45,17 @@ jobs:
         # Only the latest available version of each OS is tested
         os:
           - ubuntu-24.04
-          - macos-14 # aarch64
+          - macos-15
+          - macos-15-intel
           - windows-2025
         # Only LTS versions greater than 8 are tested
         java-version: [ '8', '11', '17', '21' ]
         include:
           - os: ubuntu-24.04
             shell: bash
-          - os: macos-14
+          - os: macos-15
+            shell: bash
+          - os: macos-15-intel
             shell: bash
           - os: windows-2025
             shell: wsl-bash
