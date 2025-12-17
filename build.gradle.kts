@@ -85,7 +85,7 @@ val develocityMavenComponents by configurations.creating
 
 dependencies {
     argbash("argbash:argbash:2.10.0@zip")
-    develocityInjection("com.gradle:develocity-injection:2.0")
+    develocityInjection("com.gradle:develocity-injection:2.0.1")
     develocityComponents("com.gradle:build-scan-summary:$buildScanSummaryVersion")
     develocityMavenComponents("com.gradle:gradle-enterprise-maven-extension:1.18.4")
     mavenComponents(project(path = ":configure-develocity-maven-extension", configuration = "shadow"))
