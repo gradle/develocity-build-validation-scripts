@@ -59,7 +59,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           java-version: ${{ matrix.java-version }}
-          distribution: ${{ matrix.os == 'macos-14' && 'zulu' || 'temurin' }} # No Temurin JDK 8 distribution for aarch64
+          distribution: ${{ matrix.os == 'macos-15' && 'zulu' || 'temurin' }} # No Temurin JDK 8 distribution for aarch64
       - name: Download and extract build validation Scripts
         run: |
           curl -L -O https://github.com/gradle/develocity-build-validation-scripts/releases/download/development-latest/develocity-gradle-build-validation-dev.zip
