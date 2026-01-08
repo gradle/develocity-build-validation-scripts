@@ -67,6 +67,12 @@ Use the following command to download and unpack the build validation scripts fo
 curl -s -L -O https://github.com/gradle/develocity-build-validation-scripts/releases/download/v2.8/develocity-maven-build-validation-2.8.zip && unzip -q -o develocity-maven-build-validation-2.8.zip
 ```
 
+Once downloaded, run the following command to verify that the scripts are set up correctly:
+
+```bash
+./01-validate-local-build-caching-same-location.sh --version
+```
+
 ## Structure
 
 In the top-level folder, there are four different scripts that you can execute, each one representing
@@ -139,6 +145,8 @@ the local builds to publish their build scans to a Develocity server reachable a
 ```bash
 ./01-validate-local-build-caching-same-location.sh -g compile -r https://github.com/gradle/maven-build-scan-quickstart -e -s https://develocity.example.io
 ```
+
+If this does not complete successfully and produce a proper experiment summary, consult the items listed further below.
 
 ## Authenticating with Develocity
 
