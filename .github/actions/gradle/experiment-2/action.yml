@@ -120,7 +120,7 @@ runs:
       shell: bash
     - name: Archive receipt
       id: upload-artifact
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       if: always()
       with:
         name: experiment-2-receipt-${{ github.job }}${{ strategy.job-total > 1 && format('-{0}', strategy.job-index) || '' }}
