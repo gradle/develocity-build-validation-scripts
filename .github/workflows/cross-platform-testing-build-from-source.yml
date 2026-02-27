@@ -86,7 +86,7 @@ jobs:
           java-version: ${{ matrix.java-version }}
           distribution: ${{ matrix.os == 'macos-15' && 'zulu' || 'temurin' }} # No Temurin JDK 8 distribution for aarch64
       - name: Download built script artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: artifacts
       - name: Extract build validation scripts
