@@ -93,8 +93,8 @@ runs:
         if [ "${{ inputs.enableGradleEnterprise }}" == "true" ]; then
           ARG_DEVELOCITY_ENABLE="${{ inputs.enableGradleEnterprise }}"
         fi
-        if [ "${{ inputs.enableDeveocity }}" == "true" ]; then
-          ARG_DEVELOCITY_ENABLE="${{ inputs.enableDeveocity }}"
+        if [ "${{ inputs.enableDevelocity }}" == "true" ]; then
+          ARG_DEVELOCITY_ENABLE="${{ inputs.enableDevelocity }}"
         fi
         ARG_FAIL_IF_NOT_FULLY_CACHEABLE=""
         if [ "${{ inputs.failIfNotFullyCacheable }}" == "true" ]; then

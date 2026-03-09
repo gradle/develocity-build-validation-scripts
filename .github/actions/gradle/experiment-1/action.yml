@@ -90,8 +90,8 @@ runs:
         if [ "${{ inputs.enableGradleEnterprise }}" == "true" ]; then
           ARG_DEVELOCITY_ENABLE="${{ inputs.enableGradleEnterprise }}"
         fi
-        if [ "${{ inputs.enableDeveocity }}" == "true" ]; then
-          ARG_DEVELOCITY_ENABLE="${{ inputs.enableDeveocity }}"
+        if [ "${{ inputs.enableDevelocity }}" == "true" ]; then
+          ARG_DEVELOCITY_ENABLE="${{ inputs.enableDevelocity }}"
         fi
 
         # Navigate into the folder containing the validation scripts
