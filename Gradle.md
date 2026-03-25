@@ -170,6 +170,8 @@ In the unlikely and insecure case that your Develocity server is using a self-si
 
 If the requests to fetch the build scan data from your Develocity server are timing out, edit the `network.settings` file and uncomment and update the lines that end with `timeout`.
 
+If the build scan data is not yet available when the scripts try to fetch it, the scripts will wait up to 300 seconds (5 minutes) by default. To adjust this, edit the `network.settings` file and uncomment and update the line that starts with `max.wait.time`, specifying the maximum wait time in seconds.
+
 ## Configuring custom value lookup names
 
 The scripts that fetch build scan data expect some of it to be present as custom values (Git repository, branch name, and commit id). By default, the scripts assume that these custom values have been created by the [Common Custom User Data Gradle plugin](https://plugins.gradle.org/plugin/com.gradle.common-custom-user-data-gradle-plugin). If you are not using that plugin but your build still captures the same data under different custom value names, you can provide a mapping file so that the required data can be extracted from your build scans. An example mapping file named [mapping.example](components/scripts/mapping.example) can be found at the same location as where the scripts are located.

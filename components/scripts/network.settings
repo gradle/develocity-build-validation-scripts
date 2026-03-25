@@ -21,3 +21,6 @@
 # Uncomment to use a custom connect or read timeout when fetching Build Scan data
 #connect.timeout=PT5S
 #read.timeout=PT30S
+
+# Uncomment to use a custom max wait time for Build Scan data to become available (in seconds)
+#max.wait.time=300

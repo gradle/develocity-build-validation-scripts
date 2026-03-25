@@ -102,8 +102,17 @@ fetch_build_scan_data() {
     args+=("--brief-logging")
   fi
 
+  local max_wait_time=300
+  if [ -f "${SCRIPT_DIR}/network.settings" ]; then
+    local configured_wait_time
+    configured_wait_time=$(grep -E '^max\.wait\.time=' "${SCRIPT_DIR}/network.settings" | tail -1 | cut -d'=' -f2)
+    if [ -n "${configured_wait_time}" ]; then
+      max_wait_time="${configured_wait_time}"
+    fi
+  fi
+
   if [[ "${fail_if_not_fully_cacheable}" == "on" ]]; then
-    args+=("--max-total-wait-time" "120")
+    args+=("--max-total-wait-time" "${max_wait_time}")
   fi
 
   if [[ -n "${run_id}" ]]; then
