@@ -111,9 +111,7 @@ fetch_build_scan_data() {
     fi
   fi
 
-  if [[ "${fail_if_not_fully_cacheable}" == "on" ]]; then
-    args+=("--max-total-wait-time" "${max_wait_time}")
-  fi
+  args+=("--max-total-wait-time" "${max_wait_time}")
 
   if [[ -n "${run_id}" ]]; then
     args+=("--experiment-run-id" "$run_id")
