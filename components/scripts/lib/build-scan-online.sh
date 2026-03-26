@@ -4,6 +4,34 @@ readonly LOGGING_BRIEF='brief_logging'
 readonly LOGGING_VERBOSE='verbose_logging'
 readonly RUN_ID_NONE=''
 
+read_network_setting() {
+  local key="$1"
+  local settings_file="${SCRIPT_DIR}/network.settings"
+  if [ -f "${settings_file}" ]; then
+    local value
+    value=$(grep -E "^${key}=" "${settings_file}" | head -1 | cut -d'=' -f2-)
+    if [ -n "${value}" ]; then
+      printf '%s' "${value}"
+    fi
+  fi
+}
+
+parse_duration_to_seconds() {
+  local duration="$1"
+  local total=0
+
+  if [[ "${duration}" =~ ^PT(([0-9]+)H)?(([0-9]+)M)?(([0-9]+)S)?$ ]]; then
+    local hours="${BASH_REMATCH[2]:-0}"
+    local minutes="${BASH_REMATCH[4]:-0}"
+    local seconds="${BASH_REMATCH[6]:-0}"
+    total=$(( hours * 3600 + minutes * 60 + seconds ))
+  else
+    die "ERROR: Invalid duration format '${duration}'. Expected ISO 8601 duration (e.g., PT2M, PT30S, PT1H30M)."
+  fi
+
+  printf '%d' "${total}"
+}
+
 # Main entrypoint for processing data online using the Build Scan summary tool.
 # All scripts should call this function to fetch Build Scan data used in the
 # experiment summary.
@@ -102,7 +130,12 @@ fetch_build_scan_data() {
     args+=("--brief-logging")
   fi
 
-  if [[ "${fail_if_not_fully_cacheable}" == "on" ]]; then
+  local max_wait_time_setting
+  max_wait_time_setting="$(read_network_setting 'max.wait.time')"
+
+  if [ -n "${max_wait_time_setting}" ]; then
+    args+=("--max-total-wait-time" "$(parse_duration_to_seconds "${max_wait_time_setting}")")
+  elif [[ "${fail_if_not_fully_cacheable}" == "on" ]]; then
     args+=("--max-total-wait-time" "120")
   fi
 
