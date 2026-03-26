@@ -168,7 +168,7 @@ If your Develocity server is using a certificate signed by an internal Certifica
 
 In the unlikely and insecure case that your Develocity server is using a self-signed certificate, edit the `network.settings` file and uncomment and update the lines that start with `ssl`.
 
-If the requests to fetch the build scan data from your Develocity server are timing out, edit the `network.settings` file and uncomment and update the lines that end with `timeout`.
+If the requests to fetch the build scan data from your Develocity server are timing out, edit the `network.settings` file and uncomment and update the lines that end with `timeout`. If the build scan data is not yet available when fetched, edit the `network.settings` file and uncomment and update the `max.wait.time` line.
 
 ## Configuring custom value lookup names
 
