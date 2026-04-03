@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("com.gradleup.shadow") version "9.3.0"
+    id("com.gradleup.shadow") version "9.4.1"
 }
 
 repositories {
@@ -8,13 +8,13 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.apache.maven:maven-core:3.6.3") {
+    compileOnly("org.apache.maven:maven-core:3.9.14") {
         because("compatibility with older versions of Maven is required")
     }
     compileOnly("com.gradle:gradle-enterprise-maven-extension:1.20.1") {
         because("compatibility with older versions of the Gradle Enterprise Maven extension is required")
     }
-    compileOnly("com.gradle:develocity-maven-extension:2.3")
+    compileOnly("com.gradle:develocity-maven-extension:2.4.0")
     implementation("com.gradle:develocity-maven-extension-adapters:1.0")
 }
 
