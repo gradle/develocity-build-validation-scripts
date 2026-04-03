@@ -15,6 +15,16 @@
       "depNameTemplate": "com.gradle:common-custom-user-data-gradle-plugin",
       "datasourceTemplate": "maven",
       "registryUrlTemplate": "https://plugins.gradle.org/m2"
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["components/scripts/lib/gradle\\.sh"],
+      "matchStrings": [
+        "develocity-plugin\\.version=\"(?<currentValue>[^\"]+)\""
+      ],
+      "depNameTemplate": "com.gradle:develocity-gradle-plugin",
+      "datasourceTemplate": "maven",
+      "registryUrlTemplate": "https://plugins.gradle.org/m2"
     }
   ],
   "packageRules": [
