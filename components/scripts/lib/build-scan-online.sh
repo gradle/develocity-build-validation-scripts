@@ -4,6 +4,18 @@ readonly LOGGING_BRIEF='brief_logging'
 readonly LOGGING_VERBOSE='verbose_logging'
 readonly RUN_ID_NONE=''
 
+read_network_setting() {
+  local key="$1"
+  local settings_file="${SCRIPT_DIR}/network.settings"
+  if [ -f "${settings_file}" ]; then
+    local value
+    value=$(grep -E "^${key}=" "${settings_file}" | head -1 | cut -d'=' -f2-)
+    if [ -n "${value}" ]; then
+      printf '%s' "${value}"
+    fi
+  fi
+}
+
 # Main entrypoint for processing data online using the Build Scan summary tool.
 # All scripts should call this function to fetch Build Scan data used in the
 # experiment summary.
@@ -102,8 +114,13 @@ fetch_build_scan_data() {
     args+=("--brief-logging")
   fi
 
-  if [[ "${fail_if_not_fully_cacheable}" == "on" ]]; then
-    args+=("--max-total-wait-time" "120")
+  local max_wait_time_setting
+  max_wait_time_setting="$(read_network_setting 'max.wait.time')"
+
+  if [ -n "${max_wait_time_setting}" ]; then
+    args+=("--max-total-wait-time" "${max_wait_time_setting}")
+  elif [[ "${fail_if_not_fully_cacheable}" == "on" ]]; then
+    args+=("--max-total-wait-time" "PT2M")
   fi
 
   if [[ -n "${run_id}" ]]; then
