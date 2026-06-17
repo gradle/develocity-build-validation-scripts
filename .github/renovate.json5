@@ -32,6 +32,13 @@
       "groupName": "GitHub Actions"
     },
     {
+      // Auto-merge GitHub Actions digest re-pins. Major version bumps are
+      // excluded by the update types and stay manual.
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["digest", "pinDigest"],
+      "automerge": true,
+    },
+    {
       "matchPackageNames": ["com.gradle:gradle-enterprise-maven-extension"],
       "matchUpdateTypes": ["major", "minor"],
       "enabled": false
