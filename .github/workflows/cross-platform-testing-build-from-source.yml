@@ -72,16 +72,17 @@ jobs:
       - name: Set up JDK ${{ matrix.java-version }} on WSL
         if: ${{ runner.os == 'Windows' }}
         run: |
-          wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | sudo apt-key add -
-          echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | sudo tee /etc/apt/sources.list.d/adoptium.list
+          set -eo pipefail
+          curl -fsSL https://repos.azul.com/azul-repo.key | sudo gpg --dearmor -o /usr/share/keyrings/azul.gpg
+          echo "deb [signed-by=/usr/share/keyrings/azul.gpg] https://repos.azul.com/zulu/deb stable main" | sudo tee /etc/apt/sources.list.d/zulu.list
           sudo apt-get update
-          sudo apt-get install -y temurin-${{ matrix.java-version }}-jdk
+          sudo apt-get install -y zulu${{ matrix.java-version }}-jdk
       - name: Set up JDK ${{ matrix.java-version }}
         if: ${{ runner.os != 'Windows' }}
         uses: actions/setup-java@ad2b38190b15e4d6bdf0c97fb4fca8412226d287 # v5
         with:
           java-version: ${{ matrix.java-version }}
-          distribution: ${{ matrix.os == 'macos-15' && 'zulu' || 'temurin' }} # No Temurin JDK 8 distribution for aarch64
+          distribution: zulu
       - name: Download built script artifacts
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
@@ -92,13 +93,13 @@ jobs:
           unzip -o develocity-maven-build-validation-*.zip
       - name: Run Gradle Experiment 01
         working-directory: develocity-gradle-build-validation
-        run: ./01-validate-incremental-building.sh -r https://github.com/etiennestuder/java-ordered-properties -t build -s https://ge.solutions-team.gradle.com
+        run: ./01-validate-incremental-building.sh -r https://github.com/gradle/gradle-build-scan-quickstart.git -c e7e778e8a00d6ec7e782d7c2a78c4d98e7e4c374 -t build -s https://ge.solutions-team.gradle.com
       - name: Run Gradle Experiment 02
         working-directory: develocity-gradle-build-validation
-        run: ./02-validate-local-build-caching-same-location.sh -r https://github.com/etiennestuder/java-ordered-properties -t build -s https://ge.solutions-team.gradle.com
+        run: ./02-validate-local-build-caching-same-location.sh -r https://github.com/gradle/gradle-build-scan-quickstart.git -c e7e778e8a00d6ec7e782d7c2a78c4d98e7e4c374 -t build -s https://ge.solutions-team.gradle.com
       - name: Run Gradle Experiment 03
         working-directory: develocity-gradle-build-validation
-        run: ./03-validate-local-build-caching-different-locations.sh -r https://github.com/etiennestuder/java-ordered-properties -t build -s https://ge.solutions-team.gradle.com
+        run: ./03-validate-local-build-caching-different-locations.sh -r https://github.com/gradle/gradle-build-scan-quickstart.git -c e7e778e8a00d6ec7e782d7c2a78c4d98e7e4c374 -t build -s https://ge.solutions-team.gradle.com
       - name: Run Gradle Experiment 04
         working-directory: develocity-gradle-build-validation
         run: ./04-validate-remote-build-caching-ci-ci.sh -1 https://ge.solutions-team.gradle.com/s/p4ghldkcscfwi -2 https://ge.solutions-team.gradle.com/s/jhzljnet32x5m
