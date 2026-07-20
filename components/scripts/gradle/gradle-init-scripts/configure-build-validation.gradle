@@ -137,7 +137,7 @@ if (GradleVersion.current() < GradleVersion.version('6.0')) {
 } else {
     gradle.settingsEvaluated { settings ->
         if (!settings.pluginManager.hasPlugin(GRADLE_ENTERPRISE_PLUGIN_ID) && !settings.pluginManager.hasPlugin(DEVELOCITY_PLUGIN_ID)) {
-            failMissingPlugin(DEVELOCITY_PLUGIN_ID, 'https://docs.develocity.ai/gradle/4.5/gradle-plugin/#gradle_6_x_and_later')
+            failMissingPlugin(DEVELOCITY_PLUGIN_ID, 'https://docs.develocity.ai/gradle/current/gradle-plugin/#gradle_6_x_and_later')
         }
 
         if (!settings.pluginManager.hasPlugin(CCUD_PLUGIN_ID)) {
@@ -159,7 +159,7 @@ if (GradleVersion.current() < GradleVersion.version('6.0')) {
         settings.pluginManager.withPlugin(DEVELOCITY_PLUGIN_ID) {
             if (!settings.develocity.server.present) {
                 settings.develocity.buildScan.publishing.onlyIf { false } // prevent publishing to scans.gradle.com
-                failMissingDevelocityServerURL('https://docs.develocity.ai/gradle/current/gradle-plugin/#gradle_6_x_and_later')
+                failMissingDevelocityServerURL('https://docs.develocity.ai/gradle/current/gradle-plugin/#connecting_to_develocity')
             }
 
             settings.develocity.buildScan.publishing.onlyIf { true }
