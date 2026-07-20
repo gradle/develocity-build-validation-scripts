@@ -331,7 +331,7 @@ navigating in the browser to the 'My Settings' section from the user menu of
 your Develocity UI. Your Develocity access key must be specified in the
 ~/.m2/.develocity/keys.properties file.
 
-https://docs.gradle.com/develocity/maven-extension/current/#via_file
+https://docs.develocity.ai/maven/current/maven-extension/#via-file
 
 Some of the fetched build scan data is expected to be present as custom values.
 By default, this experiment assumes that these custom values have been created
