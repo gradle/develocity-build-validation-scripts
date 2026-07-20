@@ -178,7 +178,7 @@ If you choose option b) and do not want to interfere with an already existing
 build caching configuration in your build, you can override the local and
 remote build cache configuration via system properties right when triggering
 the build on CI. Details on how to provide the overrides are available from the
-documentation of the the Develocity Maven extension.
+documentation of the Develocity Maven extension.
 
 https://docs.develocity.ai/maven/current/maven-extension/#configuring_the_remote_cache
 EOF
