@@ -311,9 +311,9 @@ print_performance_characteristics_footer() {
 
 performance_characteristics_link() {
   if [[ "${BUILD_TOOL}" == "Maven" ]]; then
-    echo "https://gradle.com/bvs/main/Maven.md#performance-characteristics"
+    echo "https://develocity.ai/bvs/main/Maven.md#performance-characteristics"
   else
-    echo "https://gradle.com/bvs/main/Gradle.md#performance-characteristics"
+    echo "https://develocity.ai/bvs/main/Gradle.md#performance-characteristics"
   fi
 }
 

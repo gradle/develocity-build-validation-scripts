@@ -10,8 +10,6 @@ def expDir = getInputParam(gradle, 'develocity.build-validation.expDir')
 def remoteBuildCacheType = getInputParam(gradle, 'develocity.build-validation.remoteBuildCacheType')
 def remoteBuildCacheUrl = getInputParam(gradle, 'develocity.build-validation.remoteBuildCacheUrl')
 
-def docsRoot = 'https://docs.gradle.com/develocity/gradle-plugin'
-
 settingsEvaluated { Settings settings ->
     settings.buildCache {
         local {
@@ -28,7 +26,7 @@ settingsEvaluated { Settings settings ->
                 logger.debug("Configuring remote build cache implementation for '${settings.rootProject.name}' as: ${remoteBuildCacheImplementation}")
                 remote(remoteBuildCacheImplementation)
             } else if (isTopLevelBuild) {
-                failMissingRequiredImplementation(remoteBuildCacheType, expDir, docsRoot)
+                failMissingRequiredImplementation(remoteBuildCacheType, expDir)
             }
         }
 
@@ -43,7 +41,7 @@ settingsEvaluated { Settings settings ->
                 if (remoteBuildCacheUrl) {
                     remote.url = remoteBuildCacheUri
                 } else if (!remote.url) {
-                    failMissingUrlForHttpBuildCache(expDir, docsRoot)
+                    failMissingUrlForHttpBuildCache(expDir)
                 }
             } else if (isBuildCacheImplementationFor(remote, 'com.gradle.develocity') || isBuildCacheImplementationFor(remote, 'com.gradle.enterprise')) {
                 if (remoteBuildCacheUri) {
@@ -52,7 +50,7 @@ settingsEvaluated { Settings settings ->
                 }
             }
         } else if (isTopLevelBuild) {
-            failMissingRemoteBuildCacheConfiguration(expDir, docsRoot)
+            failMissingRemoteBuildCacheConfiguration(expDir)
         }
     }
 }
@@ -93,36 +91,36 @@ static void failInvalidRemoteBuildCacheType(String remoteBuildCacheType, String 
     throw new IllegalStateException(message)
 }
 
-static void failMissingRequiredImplementation(String remoteBuildCacheType, String expDir, String docsRoot) {
+static void failMissingRequiredImplementation(String remoteBuildCacheType, String expDir) {
     def errorFile = new File(expDir, 'errors.txt')
     errorFile.text = "Remote build cache connector type '${remoteBuildCacheType}' requested, but the required plugin is not applied."
     if (remoteBuildCacheType == 'develocity') {
         throw new IllegalStateException("Remote build cache connector type 'develocity' requested,\n" +
             "but the Develocity Gradle plugin is not applied.\n" +
-            "Either apply it directly (see $docsRoot/current/#applying_the_plugin),\n" +
+            "Either apply it directly (see https://docs.develocity.ai/gradle/current/gradle-plugin/#applying_the_plugin),\n" +
             "use --enable-develocity to enable the plugin,\n" +
             "or use --remote-build-cache-type to choose a different remote build cache connector type\n" +
             "when running the build validation script.")
     } else {
         throw new IllegalStateException("Remote build cache connector type 'gradle-enterprise' requested,\n" +
-            "but the Gradle Enterprise Gradle plugin is not applied (see $docsRoot/legacy/#applying_the_plugin).")
+            "but the Gradle Enterprise Gradle plugin is not applied (see https://docs.gradle.com/develocity/legacy/gradle-plugin/legacy/#applying_the_plugin).")
     }
 }
 
 // Gradle already fails in this case, but handling it here means we can fail the experiment more
 // gracefully and provide guidance the user.
-static void failMissingUrlForHttpBuildCache(String expDir, String docsRoot) {
+static void failMissingUrlForHttpBuildCache(String expDir) {
     def errorFile = new File(expDir, 'errors.txt')
     errorFile.text = 'A remote build cache URL has not been configured in the project or on the command line.'
     throw new IllegalStateException("A remote build cache URL is not configured.\n"
-        + "Either configure it directly (see $docsRoot/current/#using_gradles_built_in_http_connector) in the project,\n"
+        + "Either configure it directly (see https://docs.develocity.ai/gradle/current/gradle-plugin/#using-gradles-built-in-http-connector) in the project,\n"
         + "or use --remote-build-cache-url when running the build validation script.")
 }
 
-static void failMissingRemoteBuildCacheConfiguration(String expDir, String docsRoot) {
+static void failMissingRemoteBuildCacheConfiguration(String expDir) {
     def errorFile = new File(expDir, 'errors.txt')
     errorFile.text = "Remote build cache is not configured for the project."
     throw new IllegalStateException("Remote build cache is not configured for the project.\n" +
-        "Either configure it directly (see $docsRoot/current/#using_the_develocity_connector),\n" +
+        "Either configure it directly (see https://docs.develocity.ai/gradle/current/gradle-plugin/#using_the_develocity_connector),\n" +
         "or use --remote-build-cache-type when running the build validation script.")
 }

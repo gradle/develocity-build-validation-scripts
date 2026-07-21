@@ -45,7 +45,7 @@ during daily development, it is advisable that you apply the Common Custom User
 Data Gradle plugin to your build. Details on how to apply the plugin are
 available from the documentation of the build validation scripts.
 
-https://gradle.com/bvs/main/Gradle.md#applying-the-common-custom-user-data-gradle-plugin
+https://develocity.ai/bvs/main/Gradle.md#applying-the-common-custom-user-data-gradle-plugin
 
 Your updated build configuration should be pushed before proceeding.
 
@@ -73,7 +73,7 @@ during daily development, it is advisable that you apply the Common Custom User
 Data Maven extension to your build. Details on how to apply the extension are
 available from the documentation of the build validation scripts.
 
-https://gradle.com/bvs/main/Maven.md#applying-the-common-custom-user-data-maven-extension
+https://develocity.ai/bvs/main/Maven.md#applying-the-common-custom-user-data-maven-extension
 
 Your updated build configuration should be pushed before proceeding.
 
@@ -178,9 +178,9 @@ If you choose option b) and do not want to interfere with an already existing
 build caching configuration in your build, you can override the local and
 remote build cache configuration via system properties right when triggering
 the build on CI. Details on how to provide the overrides are available from the
-documentation of the the Develocity Maven extension.
+documentation of the Develocity Maven extension.
 
-https://docs.gradle.com/develocity/maven-extension/current/#configuring_the_remote_cache
+https://docs.develocity.ai/maven/current/maven-extension/#configuring_the_remote_cache
 EOF
   else
     IFS='' read -r -d '' build_tool_instructions <<EOF
@@ -239,9 +239,9 @@ explain_prerequisites_api_access() {
   fi
 
   if [[ "${BUILD_TOOL}" == "Maven" ]]; then
-    documentation_link="https://gradle.com/bvs/main/Maven.md#authenticating-with-develocity"
+    documentation_link="https://develocity.ai/bvs/main/Maven.md#authenticating-with-develocity"
   else
-    documentation_link="https://gradle.com/bvs/main/Gradle.md#authenticating-with-develocity"
+    documentation_link="https://develocity.ai/bvs/main/Gradle.md#authenticating-with-develocity"
   fi
 
   IFS='' read -r -d '' text <<EOF
