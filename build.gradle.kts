@@ -411,6 +411,10 @@ fun releaseVersion(): Provider<String> {
 }
 
 fun releaseNotes(): Provider<String> {
+    val legacyDeprecationBanner = """
+        > [!IMPORTANT]
+        > The distributions of the Develocity Build Validation Scripts prefixed with `gradle-enterprise` are deprecated and will be removed in a future release. Migrate to the distributions prefixed with `develocity` instead.
+    """.trimIndent()
     val releaseNotesFile = layout.projectDirectory.file("release/changes.md")
-    return providers.fileContents(releaseNotesFile).asText.map { it.trim() }
+    return providers.fileContents(releaseNotesFile).asText.map { "$legacyDeprecationBanner\n\n${it.trim()}" }
 }
