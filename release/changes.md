@@ -1,1 +1,1 @@
-- [FIX] Documentation and error message links use `gradle.com` instead of `develocity.ai`
+- [NEW] TBD
