@@ -1,1 +1,2 @@
 - [NEW] TBD
+- [FIX] Wait longer for Build Scan data to become available when `--fail-if-not-fully-cacheable` is set, and allow the wait time to be configured via `max.wait.time` in `network.settings`
