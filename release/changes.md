@@ -1,2 +1,1 @@
-- [NEW] TBD
 - [NEW] Add a `max.wait.time` setting to `network.settings` to configure how long to wait for Develocity Build Scan data to become available
