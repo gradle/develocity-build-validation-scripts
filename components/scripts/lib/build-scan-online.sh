@@ -102,8 +102,11 @@ fetch_build_scan_data() {
     args+=("--brief-logging")
   fi
 
+  # When failing the build if it is not fully cacheable, the Build Scan data
+  # must be available, so instruct the summary tool to wait longer for it to
+  # become available. A user-set max.wait.time in network.settings always wins.
   if [[ "${fail_if_not_fully_cacheable}" == "on" ]]; then
-    args+=("--max-total-wait-time" "120")
+    args+=("--require-build-scans")
   fi
 
   if [[ -n "${run_id}" ]]; then
