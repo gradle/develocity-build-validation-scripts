@@ -1,1 +1,2 @@
 - [NEW] Add a `max.wait.time` setting to `network.settings` to configure how long to wait for Develocity Build Scan data to become available
+- [FIX] More reliably retry Build Scan data fetches that time out while streaming the response body
