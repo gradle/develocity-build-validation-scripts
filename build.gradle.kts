@@ -59,7 +59,7 @@ repositories {
 val isDevelopmentRelease = !hasProperty("finalRelease")
 val releaseVersion = releaseVersion()
 val releaseNotes = releaseNotes()
-val buildScanSummaryVersion = "1.0.8-2026.1.0"
+val buildScanSummaryVersion = "1.0.9-2026.1.0"
 
 allprojects {
     version = releaseVersion.get()
