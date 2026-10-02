@@ -8,7 +8,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.apache.maven:maven-core:3.9.16") {
+    compileOnly("org.apache.maven:maven-core:3.10.0") {
         because("compatibility with older versions of Maven is required")
     }
     compileOnly("com.gradle:gradle-enterprise-maven-extension:1.20.1") {
