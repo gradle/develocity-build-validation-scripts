@@ -7,7 +7,7 @@ plugins {
 val isCI = System.getenv("GITHUB_ACTIONS") != null
 
 develocity {
-    server = "https://solutions.develocity.cloud"
+    server = "https://ge.solutions-team.gradle.com"
     buildScan {
         uploadInBackground = !isCI
         publishing.onlyIf { it.isAuthenticated }
