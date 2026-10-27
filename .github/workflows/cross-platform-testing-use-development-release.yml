@@ -66,7 +66,7 @@ jobs:
             exit 0
           fi
           oidc_token=$(curl -sSfG -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            --data-urlencode "audience=https://ge.solutions-team.gradle.com" \
+            --data-urlencode "audience=https://solutions.develocity.cloud" \
             "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -r .value)
           echo "::add-mask::$oidc_token"
           token=$(curl -sSf -X POST -H "Authorization: Bearer $oidc_token" \
