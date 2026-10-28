@@ -2,6 +2,7 @@ name: Verify Build
 
 permissions:
   contents: read
+  id-token: write
 
 on:
   pull_request:
@@ -20,9 +21,21 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+      - name: Get GitHub OIDC token for setup-gradle
+        id: develocity-oidc
+        run: |
+          if [ -z "$ACTIONS_ID_TOKEN_REQUEST_URL" ]; then
+            echo "::warning::No GitHub OIDC token available (e.g. PR from a fork), Develocity will not be authenticated"
+            exit 0
+          fi
+          token=$(curl -sSfG -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            --data-urlencode "audience=https://solutions.develocity.cloud" \
+            "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -r .value)
+          echo "::add-mask::$token"
+          echo "access-key=solutions.develocity.cloud=$token" >> "$GITHUB_OUTPUT"
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6
         with:
-          develocity-access-key: ${{ secrets.DV_SOLUTIONS_ACCESS_KEY }}
+          develocity-access-key: ${{ steps.develocity-oidc.outputs.access-key }}
       - name: Build with Gradle
         run: ./gradlew build
