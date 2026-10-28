@@ -33,7 +33,7 @@ jobs:
             --data-urlencode "audience=https://solutions.develocity.cloud" \
             "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -r .value)
           echo "::add-mask::$token"
-          echo "access-key=ge.solutions-team.gradle.com=$token" >> "$GITHUB_OUTPUT"
+          echo "access-key=solutions.develocity.cloud=$token" >> "$GITHUB_OUTPUT"
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6
         with:
@@ -107,9 +107,9 @@ jobs:
             "$ACTIONS_ID_TOKEN_REQUEST_URL" | jq -r .value)
           echo "::add-mask::$oidc_token"
           token=$(curl -sSf -X POST -H "Authorization: Bearer $oidc_token" \
-            "https://ge.solutions-team.gradle.com/api/auth/token?expiresInHours=2")
+            "https://solutions.develocity.cloud/api/auth/token?expiresInHours=2")
           echo "::add-mask::$token"
-          echo "DEVELOCITY_ACCESS_KEY=ge.solutions-team.gradle.com=$token" >> "$GITHUB_ENV"
+          echo "DEVELOCITY_ACCESS_KEY=solutions.develocity.cloud=$token" >> "$GITHUB_ENV"
       - name: Download built script artifacts
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
         with:
@@ -120,28 +120,28 @@ jobs:
           unzip -o develocity-maven-build-validation-*.zip
       - name: Run Gradle Experiment 01
         working-directory: develocity-gradle-build-validation
-        run: ./01-validate-incremental-building.sh -r https://github.com/gradle/gradle-build-scan-quickstart.git -c e7e778e8a00d6ec7e782d7c2a78c4d98e7e4c374 -t build -s https://ge.solutions-team.gradle.com
+        run: ./01-validate-incremental-building.sh -r https://github.com/gradle/gradle-build-scan-quickstart.git -c e7e778e8a00d6ec7e782d7c2a78c4d98e7e4c374 -t build -s https://solutions.develocity.cloud
       - name: Run Gradle Experiment 02
         working-directory: develocity-gradle-build-validation
-        run: ./02-validate-local-build-caching-same-location.sh -r https://github.com/gradle/gradle-build-scan-quickstart.git -c e7e778e8a00d6ec7e782d7c2a78c4d98e7e4c374 -t build -s https://ge.solutions-team.gradle.com
+        run: ./02-validate-local-build-caching-same-location.sh -r https://github.com/gradle/gradle-build-scan-quickstart.git -c e7e778e8a00d6ec7e782d7c2a78c4d98e7e4c374 -t build -s https://solutions.develocity.cloud
       - name: Run Gradle Experiment 03
         working-directory: develocity-gradle-build-validation
-        run: ./03-validate-local-build-caching-different-locations.sh -r https://github.com/gradle/gradle-build-scan-quickstart.git -c e7e778e8a00d6ec7e782d7c2a78c4d98e7e4c374 -t build -s https://ge.solutions-team.gradle.com
+        run: ./03-validate-local-build-caching-different-locations.sh -r https://github.com/gradle/gradle-build-scan-quickstart.git -c e7e778e8a00d6ec7e782d7c2a78c4d98e7e4c374 -t build -s https://solutions.develocity.cloud
       - name: Run Gradle Experiment 04
         working-directory: develocity-gradle-build-validation
-        run: ./04-validate-remote-build-caching-ci-ci.sh -1 https://ge.solutions-team.gradle.com/s/p4ghldkcscfwi -2 https://ge.solutions-team.gradle.com/s/jhzljnet32x5m
+        run: ./04-validate-remote-build-caching-ci-ci.sh -1 https://solutions.develocity.cloud/s/p4ghldkcscfwi -2 https://solutions.develocity.cloud/s/jhzljnet32x5m
       - name: Run Gradle Experiment 05
         working-directory: develocity-gradle-build-validation
-        run: ./05-validate-remote-build-caching-ci-local.sh -1 https://ge.solutions-team.gradle.com/s/dgndhzndrffks -s https://ge.solutions-team.gradle.com -u https://ge.solutions-team.gradle.com/cache/
+        run: ./05-validate-remote-build-caching-ci-local.sh -1 https://solutions.develocity.cloud/s/dgndhzndrffks -s https://solutions.develocity.cloud -u https://solutions.develocity.cloud/cache/
       - name: Run Maven Experiment 01
         working-directory: develocity-maven-build-validation
-        run: ./01-validate-local-build-caching-same-location.sh -r https://github.com/gradle/maven-build-scan-quickstart.git -g test -s https://ge.solutions-team.gradle.com -a '-B'
+        run: ./01-validate-local-build-caching-same-location.sh -r https://github.com/gradle/maven-build-scan-quickstart.git -g test -s https://solutions.develocity.cloud -a '-B'
       - name: Run Maven Experiment 02
         working-directory: develocity-maven-build-validation
-        run: ./02-validate-local-build-caching-different-locations.sh -r https://github.com/gradle/maven-build-scan-quickstart.git -g test -s https://ge.solutions-team.gradle.com -a '-B'
+        run: ./02-validate-local-build-caching-different-locations.sh -r https://github.com/gradle/maven-build-scan-quickstart.git -g test -s https://solutions.develocity.cloud -a '-B'
       - name: Run Maven Experiment 03
         working-directory: develocity-maven-build-validation
-        run: ./03-validate-remote-build-caching-ci-ci.sh -1 https://ge.solutions-team.gradle.com/s/sysk4hrdbkja6 -2 https://ge.solutions-team.gradle.com/s/f7yfwfxqzg5us
+        run: ./03-validate-remote-build-caching-ci-ci.sh -1 https://solutions.develocity.cloud/s/sysk4hrdbkja6 -2 https://solutions.develocity.cloud/s/f7yfwfxqzg5us
       - name: Run Maven Experiment 04
         working-directory: develocity-maven-build-validation
-        run: ./04-validate-remote-build-caching-ci-local.sh -1 https://ge.solutions-team.gradle.com/s/4zpdvd2l2ualu -s https://ge.solutions-team.gradle.com -a '-B'
+        run: ./04-validate-remote-build-caching-ci-local.sh -1 https://solutions.develocity.cloud/s/4zpdvd2l2ualu -s https://solutions.develocity.cloud -a '-B'
