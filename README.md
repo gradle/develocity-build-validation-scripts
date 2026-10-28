@@ -11,7 +11,7 @@
 # Develocity Build Validation Scripts
 
 [![Verify Build](https://github.com/gradle/develocity-build-validation-scripts/actions/workflows/build-verification.yml/badge.svg?branch=main)](https://github.com/gradle/develocity-build-validation-scripts/actions/workflows/build-verification.yml)
-[![Revved up by Develocity](https://img.shields.io/badge/Revved%20up%20by-Develocity-06A0CE?logo=Gradle&labelColor=02303A)](https://ge.solutions-team.gradle.com/scans)
+[![Revved up by Develocity](https://img.shields.io/badge/Revved%20up%20by-Develocity-06A0CE?logo=Gradle&labelColor=02303A)](https://solutions.develocity.cloud/scans)
 
 The purpose of the build validation scripts is to assist you in validating that your Gradle and Maven builds are in an optimal state in terms of maximizing work avoidance. The build validation scripts do not actually modify your build, but they surface what can be improved in your build to avoid unnecessary work in several scenarios.
 
