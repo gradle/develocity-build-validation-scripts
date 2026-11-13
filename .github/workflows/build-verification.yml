@@ -39,14 +39,10 @@ jobs:
           cache-provider: external
           develocity-access-key: ${{ steps.develocity-oidc.outputs.access-key }}
       - name: Setup Develocity Artifact Cache
-        uses: gradle/develocity-artifact-cache-github-action@0366b879b8a1dce1303e672064645c5cc228e0b9 # v1.2.0
+        uses: gradle/develocity-artifact-cache-github-action@6c8cc78b3bf10076e90f5b154eb128313d8ffea3 # v1.2.1-rc-1
         with:
           develocity-edge-url: https://usw2-edge.solutions-team.gradle.com
           develocity-auth: workload-identity
           develocity-oidc-audience: https://solutions.develocity.cloud
-          # Auto-generated image names omit the repository, so they collide across repositories on the same Edge
-          image-names: |
-            ${{ github.repository }}~${{ github.workflow }}~${{ github.job }}~${{ github.ref }}~${{ runner.os }}~${{ runner.arch }}
-            ${{ github.repository }}~${{ github.workflow }}~${{ github.job }}~refs/heads/${{ github.base_ref || github.event.repository.default_branch }}~${{ runner.os }}~${{ runner.arch }}
       - name: Build with Gradle
         run: ./gradlew build
