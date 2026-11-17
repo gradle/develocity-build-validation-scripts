@@ -46,6 +46,5 @@ jobs:
           develocity-oidc-audience: https://solutions.develocity.cloud
           cli-version: 1.11.0-rc-1
           cli-sha256: 86f8d14e55087d0267a9febcfb9de8754d392be6500abb3a3c9639063fca5d19
-          cli-repository: https://repo.grdev.net/artifactory/enterprise-libs-release-candidates-local/com/gradle/develocity-artifact-cache-cli/1.11.0-rc-1
       - name: Build with Gradle
         run: ./gradlew build
